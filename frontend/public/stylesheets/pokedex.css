@@ -994,100 +994,109 @@ td.stat-down { color: #882222; font-weight: bold; }
    TIPOS
    ═══════════════════════════════════════════════════ */
 
-.types-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-auto-rows: 1fr;
-  gap: 1rem;
-}
+/* ═══════════════════════════════════════════════════
+   TIPOS — Matriz de efectividad
+   ═══════════════════════════════════════════════════ */
 
-.type-detail-card {
-  border: 3px solid var(--black);
-  box-shadow: var(--shadow-hard);
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-
-.type-detail-header {
-  padding: 0.7rem 1rem;
+.matrix-legend {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  border-bottom: 3px solid var(--black);
-}
-
-.type-detail-name {
-  font-family: 'Press Start 2P', monospace;
-  font-size: 0.65rem;
-  color: var(--white);
-  text-shadow: 2px 2px 0 rgba(0,0,0,0.5);
-}
-
-.type-pokemon-count {
-  font-family: 'VT323', monospace;
-  font-size: 1.1rem;
-  color: rgba(255,255,255,0.8);
-}
-
-/* Fondo del header de cada tipo usando las mismas clases de tipo */
-.type-bg-normal   { background: #787858; }
-.type-bg-fire     { background: #c03000; }
-.type-bg-water    { background: #2060c0; }
-.type-bg-electric { background: #a89000; }
-.type-bg-grass    { background: #408030; }
-.type-bg-ice      { background: #6090a0; }
-.type-bg-fighting { background: #903028; }
-.type-bg-poison   { background: #682070; }
-.type-bg-ground   { background: #887830; }
-.type-bg-flying   { background: #6850b0; }
-.type-bg-psychic  { background: #a01840; }
-.type-bg-bug      { background: #607020; }
-.type-bg-rock     { background: #786820; }
-.type-bg-ghost    { background: #483870; }
-.type-bg-dragon   { background: #4010a8; }
-.type-bg-dark     { background: #483820; }
-.type-bg-steel    { background: #686878; }
-.type-bg-fairy    { background: #a04060; }
-
-.type-detail-body {
-  background: var(--card-cream);
-  padding: 0.6rem 0.8rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-  flex: 1;
-}
-
-.type-relations-row {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.5rem;
-}
-
-.type-rel-label {
-  font-family: 'Press Start 2P', monospace;
-  font-size: 0.32rem;
-  padding: 3px 5px;
-  border: 2px solid var(--black);
-  white-space: nowrap;
-  flex-shrink: 0;
-  color: var(--white);
-  margin-top: 1px;
-}
-
-.type-rel-label.atk2x  { background: #226622; }
-.type-rel-label.atkhalf { background: #882222; }
-.type-rel-label.atk0x  { background: #333; }
-.type-rel-label.def2x  { background: #882222; }
-.type-rel-label.def0x  { background: #226622; }
-
-.type-rel-badges {
-  display: flex;
+  gap: 0.6rem;
+  margin-bottom: 0.8rem;
   flex-wrap: wrap;
-  gap: 3px;
 }
+
+.matrix-legend-label {
+  font-family: 'VT323', monospace;
+  font-size: 1rem;
+  color: var(--white);
+  margin-right: 0.6rem;
+}
+
+.matrix-legend-item {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.45rem;
+  padding: 4px 8px;
+  border: 2px solid var(--black);
+  display: inline-block;
+}
+
+.matrix-scroll {
+  overflow-x: auto;
+  overflow-y: auto;
+  max-height: calc(100vh - 180px);
+  border: 3px solid var(--black);
+  box-shadow: var(--shadow-hard);
+}
+
+.type-matrix {
+  border-collapse: collapse;
+  width: max-content;
+}
+
+.type-matrix th,
+.type-matrix td {
+  border: 1px solid rgba(0,0,0,0.25);
+}
+
+.matrix-corner {
+  background: var(--black);
+  color: var(--white);
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.35rem;
+  padding: 6px 8px;
+  text-align: center;
+  white-space: nowrap;
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 3;
+}
+
+.matrix-col-header {
+  background: var(--black);
+  padding: 5px 4px;
+  text-align: center;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.matrix-row-header {
+  background: var(--black);
+  padding: 4px 6px;
+  white-space: nowrap;
+  position: sticky;
+  left: 0;
+  z-index: 1;
+}
+
+.matrix-col-header .type-badge,
+.matrix-row-header .type-badge {
+  font-size: 0.38rem;
+  padding: 3px 5px;
+}
+
+.matrix-cell {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.4rem;
+  text-align: center;
+  width: 36px;
+  height: 32px;
+  vertical-align: middle;
+}
+
+/* efectividades */
+.eff-2-cell  { background: #2d7a2d; color: #fff; }
+.eff-h-cell  { background: #8b3a3a; color: #fff; }
+.eff-0-cell  { background: #111;    color: #555; }
+.eff-1-cell  { background: #2a2a2a; color: transparent; }
+
+/* leyenda */
+.eff-2x-cell   { background: #2d7a2d; color: #fff; }
+.eff-half-cell { background: #8b3a3a; color: #fff; }
+.eff-0-cell    { background: #111;    color: #aaa; }
+.eff-1-cell    { background: #2a2a2a; color: #555; }
 
 /* ═══════════════════════════════════════════════════
    HABILIDADES
@@ -1160,7 +1169,7 @@ td.stat-down { color: #882222; font-weight: bold; }
   .moves-grid { grid-template-columns: 1fr; }
   .items-grid { grid-template-columns: 1fr; }
   .berries-grid { grid-template-columns: repeat(2, 1fr); }
-  .types-grid { grid-template-columns: 1fr; }
+  .matrix-scroll { max-height: calc(100vh - 200px); }
 
   .ability-card { flex-direction: column; }
   .ability-card-left {
