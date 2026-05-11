@@ -71,16 +71,26 @@
           </span>
           <span class="acc-arrow">▶</span>
         </label>
-        <div class="acc-body">
-          <div class="acc-col acc-neutral-list">
-            <div class="acc-col-header">SIN CAMBIO DE STATS</div>
-            @for(n <- natures.filter(_.increasedStat.isEmpty).sortBy(_.name)) {
-              <div class="acc-nature-row">
-                <span class="acc-nature-name">@n.name.replace("-"," ").toUpperCase</span>
-              </div>
-            }
+        @defining(natures.filter(_.increasedStat.isEmpty).sortBy(_.name)) { neutrals =>
+          <div class="acc-body">
+            <div class="acc-col">
+              <div class="acc-col-header">SIN CAMBIO DE STATS</div>
+              @for(n <- neutrals.take((neutrals.size + 1) / 2)) {
+                <div class="acc-nature-row">
+                  <span class="acc-nature-name">@n.name.replace("-"," ").toUpperCase</span>
+                </div>
+              }
+            </div>
+            <div class="acc-col">
+              <div class="acc-col-header">SIN CAMBIO DE STATS</div>
+              @for(n <- neutrals.drop((neutrals.size + 1) / 2)) {
+                <div class="acc-nature-row">
+                  <span class="acc-nature-name">@n.name.replace("-"," ").toUpperCase</span>
+                </div>
+              }
+            </div>
           </div>
-        </div>
+        }
       </div>
 
     </div>
