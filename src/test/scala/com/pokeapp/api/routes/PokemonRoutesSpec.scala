@@ -1,6 +1,7 @@
 package com.pokeapp.api.routes
 
 import cats.effect.IO
+import cats.syntax.applicative.*
 import com.pokeapp.application.pokemon.{GetPokemonFullUseCase, GetPokemonUseCase, ListPokemonUseCase, PokemonFixtures}
 import com.pokeapp.config.PokeApiConfig
 import com.pokeapp.domain.error.DomainError
@@ -65,10 +66,12 @@ class PokemonRoutesSpec extends CatsEffectSuite:
     val request = Request[IO](Method.GET, uri"/api/v1/pokemon/pikachu")
     routes.run(request).map(r => assertEquals(r.status, Status.Ok))
 
-  test("GET /api/v1/pokemon/{id} returns 404 for unknown pokemon"):
+  test("GET /api/v1/pokemon/{id} returns 404 with NOT_FOUND code for unknown pokemon"):
     val routes  = buildRoutes(repoWithPikachu).routes.orNotFound
     val request = Request[IO](Method.GET, uri"/api/v1/pokemon/9999")
-    routes.run(request).map(r => assertEquals(r.status, Status.NotFound))
+    routes.run(request).flatMap: response =>
+      assertEquals(response.status, Status.NotFound)
+      response.as[String].map(body => assert(body.contains("NOT_FOUND")))
 
   // ── Listado paginado ──────────────────────────────────────────────────────
 
@@ -101,10 +104,14 @@ class PokemonRoutesSpec extends CatsEffectSuite:
   //   [< 0]  clase inválida → 400  (representante: -1)
   //   [>= 0] clase válida   → 200  (representante: 0)
 
-  test("GET /api/v1/pokemon?limit=0 returns 400"):
+  test("GET /api/v1/pokemon?limit=0 returns 400 with BAD_REQUEST code and message"):
     val routes  = buildRoutes(repoWithPikachu).routes.orNotFound
     val request = Request[IO](Method.GET, uri"/api/v1/pokemon?limit=0&offset=0")
-    routes.run(request).map(r => assertEquals(r.status, Status.BadRequest))
+    routes.run(request).flatMap: response =>
+      assertEquals(response.status, Status.BadRequest)
+      response.as[String].map: body =>
+        assert(body.contains("BAD_REQUEST"))
+        assert(body.contains("limit must be between 1 and 100"))
 
   test("GET /api/v1/pokemon?limit=1 returns 200 (valor frontera mínimo válido)"):
     val routes  = buildRoutes(repoWithPikachu).routes.orNotFound
@@ -121,12 +128,61 @@ class PokemonRoutesSpec extends CatsEffectSuite:
     val request = Request[IO](Method.GET, uri"/api/v1/pokemon?limit=101&offset=0")
     routes.run(request).map(r => assertEquals(r.status, Status.BadRequest))
 
-  test("GET /api/v1/pokemon?offset=-1 returns 400"):
+  test("GET /api/v1/pokemon?offset=-1 returns 400 with message"):
     val routes  = buildRoutes(repoWithPikachu).routes.orNotFound
     val request = Request[IO](Method.GET, uri"/api/v1/pokemon?limit=20&offset=-1")
-    routes.run(request).map(r => assertEquals(r.status, Status.BadRequest))
+    routes.run(request).flatMap: response =>
+      assertEquals(response.status, Status.BadRequest)
+      response.as[String].map(body => assert(body.contains("offset must be >= 0")))
 
   // ── Endpoint full ─────────────────────────────────────────────────────────
+
+  // JSONs mínimos para el endpoint /full (pokemon + species + evolution chain)
+  private val pikachuJsonFull = """{
+    "id": 25, "name": "pikachu", "base_experience": 112, "height": 4, "weight": 60,
+    "is_default": true, "abilities": [], "moves": [], "stats": [],
+    "types": [{"slot": 1, "type": {"name": "electric", "url": "url"}}],
+    "sprites": {"front_default": "front.png", "front_shiny": null, "back_default": null, "back_shiny": null}
+  }"""
+  private val speciesJsonFull = """{
+    "id": 25, "name": "pikachu", "is_baby": false, "is_legendary": false, "is_mythical": false,
+    "capture_rate": 190, "base_happiness": 50, "gender_rate": 4,
+    "flavor_text_entries": [],
+    "evolution_chain": {"url": "https://pokeapi.co/api/v2/evolution-chain/10/"}
+  }"""
+  private val evolutionJsonFull = """{
+    "id": 10, "baby_trigger_item": null,
+    "chain": {"is_baby": false, "species": {"name": "pichu", "url": "url"}, "evolution_details": [], "evolves_to": []}
+  }"""
+
+  // Stub que enruta por path — necesario para testear el endpoint /full con datos reales.
+  // Sin este test que retorna 200, mutar los strings de la ruta ("api","v1","pokemon","full")
+  // no era detectado porque el único test de /full esperaba 404 en ambos casos.
+  private def fullSupportClient: Client[IO] =
+    Client.fromHttpApp(HttpApp[IO]: req =>
+      val path = req.uri.path.renderString
+      val (status, body) =
+        if path.endsWith("/pokemon/pikachu")         then (Status.Ok, pikachuJsonFull)
+        else if path.endsWith("/pokemon-species/pikachu") then (Status.Ok, speciesJsonFull)
+        else if path.contains("evolution-chain")         then (Status.Ok, evolutionJsonFull)
+        else (Status.NotFound, "")
+      Response[IO](status = status).withEntity(body).pure[IO]
+    )
+
+  test("GET /api/v1/pokemon/{name}/full returns 200 with combined data"):
+    val fullPokeApiClient = PokeApiClient[IO](fullSupportClient, PokeApiConfig("https://pokeapi.co/api/v2", 5, 0))
+    val routes = PokemonRoutes[IO](
+      GetPokemonUseCase(repoWithPikachu),
+      ListPokemonUseCase(repoWithPikachu),
+      GetPokemonFullUseCase[IO](fullPokeApiClient)
+    ).routes.orNotFound
+    val request = Request[IO](Method.GET, uri"/api/v1/pokemon/pikachu/full")
+
+    routes.run(request).flatMap: response =>
+      assertEquals(response.status, Status.Ok)
+      response.as[String].map: body =>
+        assert(body.contains("pikachu"))
+        assert(body.contains("captureRate") || body.contains("capture_rate") || body.contains("190"))
 
   // El stub devuelve 404 para PokeAPI, por lo tanto el pokemon 9999 no se encuentra
   test("GET /api/v1/pokemon/{id}/full returns 404 when pokemon not found"):

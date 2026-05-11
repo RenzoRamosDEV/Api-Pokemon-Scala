@@ -1,6 +1,7 @@
 package com.pokeapp.infrastructure.http
 
 import cats.effect.IO
+import cats.effect.Ref
 import cats.syntax.applicative.*
 import com.pokeapp.config.PokeApiConfig
 import com.pokeapp.domain.error.DomainError
@@ -55,40 +56,56 @@ class PokeApiClientSpec extends CatsEffectSuite:
       assertEquals(result.map(_.id), Right(25))
       assertEquals(result.map(_.name), Right("pikachu"))
 
-  test("getPokemon returns NotFound on 404"):
+  test("getPokemon returns NotFound on 404 with non-empty message"):
     val apiClient = PokeApiClient[IO](clientReturning(Status.NotFound, ""), config)
     apiClient.getPokemon("unknown").map: result =>
-      assert(result.isLeft)
       result match
-        case Left(DomainError.NotFound(_)) => ()
-        case other                         => fail(s"Expected NotFound but got $other")
+        case Left(DomainError.NotFound(msg)) => assert(msg.nonEmpty)
+        case other                           => fail(s"Expected NotFound but got $other")
 
   test("getPokemon returns RateLimitExceeded on 429"):
     val apiClient = PokeApiClient[IO](clientReturning(Status.TooManyRequests, ""), config)
     apiClient.getPokemon("pikachu").map: result =>
       assertEquals(result, Left(DomainError.RateLimitExceeded))
 
-  // Partición 5xx: cualquier error del servidor se mapea a ExternalApiError
-  test("getPokemon returns ExternalApiError on 500"):
+  // Partición 5xx: cualquier error del servidor se mapea a ExternalApiError con mensaje no vacío
+  test("getPokemon returns ExternalApiError on 500 with non-empty message"):
     val apiClient = PokeApiClient[IO](clientReturning(Status.InternalServerError, ""), config)
     apiClient.getPokemon("pikachu").map: result =>
       result match
-        case Left(DomainError.ExternalApiError(_, 500)) => ()
-        case other                                      => fail(s"Expected ExternalApiError(500) but got $other")
+        case Left(DomainError.ExternalApiError(msg, 500)) => assert(msg.nonEmpty)
+        case other                                        => fail(s"Expected ExternalApiError(500) but got $other")
 
   // ── listPokemon ───────────────────────────────────────────────────────────
 
+  private val listJson = """{
+    "count": 1302,
+    "next": "https://pokeapi.co/api/v2/pokemon?offset=20&limit=20",
+    "previous": null,
+    "results": [{"name": "bulbasaur", "url": "url"}]
+  }"""
+
   test("listPokemon returns paginated response on 200"):
-    val listJson = """{
-      "count": 1302,
-      "next": "https://pokeapi.co/api/v2/pokemon?offset=20&limit=20",
-      "previous": null,
-      "results": [{"name": "bulbasaur", "url": "url"}]
-    }"""
     val apiClient = PokeApiClient[IO](clientReturning(Status.Ok, listJson), config)
     apiClient.listPokemon(20, 0).map: result =>
       assertEquals(result.map(_.count), Right(1302))
       assertEquals(result.map(_.results.length), Right(1))
+
+  // Verifica que la URL construida contiene el path "pokemon" y los query params
+  // "limit" y "offset" con los valores correctos. Sin este test, mutar esos strings
+  // no es detectado porque el stub ignora la URL.
+  test("listPokemon sends request with correct path and query params"):
+    Ref.of[IO, Option[Uri]](None).flatMap: uriRef =>
+      val capturingClient = Client.fromHttpApp(HttpApp[IO]: req =>
+        uriRef.set(Some(req.uri)) *> Response[IO](status = Status.Ok).withEntity(listJson).pure[IO]
+      )
+      val apiClient = PokeApiClient[IO](capturingClient, config)
+      apiClient.listPokemon(20, 5) *> uriRef.get.map:
+        case Some(uri) =>
+          assert(uri.path.renderString.contains("pokemon"), s"path should contain 'pokemon': ${uri.path}")
+          assertEquals(uri.query.params.get("limit"), Some("20"))
+          assertEquals(uri.query.params.get("offset"), Some("5"))
+        case None => fail("No request was made")
 
   // ── getPokemonSpecies ─────────────────────────────────────────────────────
 
@@ -108,13 +125,12 @@ class PokeApiClientSpec extends CatsEffectSuite:
       assertEquals(result.map(_.captureRate), Right(190))
       assertEquals(result.map(_.evolutionChain.map(_.url)), Right(Some("https://pokeapi.co/api/v2/evolution-chain/10/")))
 
-  test("getPokemonSpecies returns NotFound on 404"):
+  test("getPokemonSpecies returns NotFound on 404 with non-empty message"):
     val apiClient = PokeApiClient[IO](clientReturning(Status.NotFound, ""), config)
     apiClient.getPokemonSpecies("unknown").map: result =>
-      assert(result.isLeft)
       result match
-        case Left(DomainError.NotFound(_)) => ()
-        case other                         => fail(s"Expected NotFound but got $other")
+        case Left(DomainError.NotFound(msg)) => assert(msg.nonEmpty)
+        case other                           => fail(s"Expected NotFound but got $other")
 
   // Partición rate limit para species: misma clase que getPokemon 429
   test("getPokemonSpecies returns RateLimitExceeded on 429"):
@@ -122,10 +138,10 @@ class PokeApiClientSpec extends CatsEffectSuite:
     apiClient.getPokemonSpecies("pikachu").map: result =>
       assertEquals(result, Left(DomainError.RateLimitExceeded))
 
-  // Partición error de servidor para species
-  test("getPokemonSpecies returns ExternalApiError on 500"):
+  // Partición error de servidor para species con mensaje no vacío
+  test("getPokemonSpecies returns ExternalApiError on 500 with non-empty message"):
     val apiClient = PokeApiClient[IO](clientReturning(Status.InternalServerError, ""), config)
     apiClient.getPokemonSpecies("pikachu").map: result =>
       result match
-        case Left(DomainError.ExternalApiError(_, 500)) => ()
-        case other                                      => fail(s"Expected ExternalApiError(500) but got $other")
+        case Left(DomainError.ExternalApiError(msg, 500)) => assert(msg.nonEmpty)
+        case other                                        => fail(s"Expected ExternalApiError(500) but got $other")

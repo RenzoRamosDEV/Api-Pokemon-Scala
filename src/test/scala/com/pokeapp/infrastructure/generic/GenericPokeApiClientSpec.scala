@@ -1,6 +1,7 @@
 package com.pokeapp.infrastructure.generic
 
 import cats.effect.IO
+import cats.effect.Ref
 import cats.syntax.applicative.*
 import com.pokeapp.config.PokeApiConfig
 import com.pokeapp.domain.error.DomainError
@@ -27,7 +28,7 @@ class GenericPokeApiClientSpec extends CatsEffectSuite:
         assert(result.isRight)
         result.foreach(json => assert(json.toString.contains("stench")))
 
-  test("getByIdOrName returns NotFound on 404"):
+  test("getByIdOrName returns NotFound on 404 with non-empty message"):
     val httpClient = clientWith(Status.NotFound, "")
     val client     = GenericPokeApiClient[IO](httpClient, config)
 
@@ -35,8 +36,8 @@ class GenericPokeApiClientSpec extends CatsEffectSuite:
       .getByIdOrName("ability", "9999")
       .map: result =>
         result match
-          case Left(DomainError.NotFound(_)) => ()
-          case other                         => fail(s"Expected NotFound, got $other")
+          case Left(DomainError.NotFound(msg)) => assert(msg.nonEmpty)
+          case other                           => fail(s"Expected NotFound, got $other")
 
   test("list returns paginated Json on 200"):
     val body =
@@ -59,8 +60,8 @@ class GenericPokeApiClientSpec extends CatsEffectSuite:
       .map: result =>
         assertEquals(result, Left(DomainError.RateLimitExceeded))
 
-  // Partición error de servidor: 500 → ExternalApiError
-  test("getByIdOrName returns ExternalApiError on 500"):
+  // Partición error de servidor: 500 → ExternalApiError con mensaje no vacío
+  test("getByIdOrName returns ExternalApiError on 500 with non-empty message"):
     val httpClient = clientWith(Status.InternalServerError, "")
     val client     = GenericPokeApiClient[IO](httpClient, config)
 
@@ -68,8 +69,23 @@ class GenericPokeApiClientSpec extends CatsEffectSuite:
       .getByIdOrName("ability", "1")
       .map: result =>
         result match
-          case Left(DomainError.ExternalApiError(_, 500)) => ()
-          case other                                      => fail(s"Expected ExternalApiError(500) but got $other")
+          case Left(DomainError.ExternalApiError(msg, 500)) => assert(msg.nonEmpty)
+          case other                                        => fail(s"Expected ExternalApiError(500) but got $other")
+
+  // Verifica que list construye la URL con query params "limit" y "offset" correctos.
+  // Sin este test, mutar esos strings no es detectado porque el stub ignora la URL.
+  test("list sends request with correct query params"):
+    val listBody = """{"count": 298, "next": null, "previous": null, "results": []}"""
+    Ref.of[IO, Option[Uri]](None).flatMap: uriRef =>
+      val capturingClient = Client.fromHttpApp(HttpApp[IO]: req =>
+        uriRef.set(Some(req.uri)) *> Response[IO](status = Status.Ok).withEntity(listBody).pure[IO]
+      )
+      val client = GenericPokeApiClient[IO](capturingClient, config)
+      client.list("ability", 10, 5) *> uriRef.get.map:
+        case Some(uri) =>
+          assertEquals(uri.query.params.get("limit"), Some("10"))
+          assertEquals(uri.query.params.get("offset"), Some("5"))
+        case None => fail("No request was made")
 
   // ── list ──────────────────────────────────────────────────────────────────
   // Particiones de equivalencia para `list`: mismas clases que getByIdOrName.
