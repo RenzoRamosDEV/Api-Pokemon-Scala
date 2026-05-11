@@ -2,30 +2,55 @@
 @main("OBJETOS — Pokédex Retro", "objetos") {
 
   <div class="page-header">
-    <h2 class="page-title">OBJETOS</h2>
+    <h2 class="page-title">POKÉ MART</h2>
   </div>
 
-  <div class="items-grid">
-    @for(item <- items) {
-      <div class="item-card">
-        <div class="item-sprite-wrap">
-          @item.sprite.map { url =>
-            <img src="@url" alt="@item.name" class="item-sprite">
-          }.getOrElse {
-            <div class="item-sprite-missing">?</div>
-          }
-        </div>
-        <div class="item-info">
-          <span class="item-id">#@{"%04d".format(item.id)}</span>
-          <h3 class="item-name">@item.name.replace("-", " ").toUpperCase</h3>
-          <span class="item-category">@item.category.replace("-", " ").toUpperCase</span>
-          <span class="item-cost">@{"%,d".format(item.cost)} P</span>
-          @if(item.shortEffect.nonEmpty && item.shortEffect != "—") {
-            <p class="item-effect">@item.shortEffect</p>
-          }
-        </div>
-      </div>
-    }
+  <div class="shop-wrap">
+    <table class="shop-table">
+      <thead>
+        <tr>
+          <th class="shop-th-sprite"></th>
+          <th class="shop-th-name">OBJETO</th>
+          <th class="shop-th-cat">CATEGORÍA</th>
+          <th class="shop-th-price">PRECIO</th>
+          <th class="shop-th-effect">EFECTO</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for(item <- items) {
+          <tr class="shop-row">
+            <td class="shop-td-sprite">
+              @item.sprite.map { url =>
+                <img src="@url" alt="@item.name" class="shop-sprite">
+              }.getOrElse {
+                <span class="shop-sprite-missing">?</span>
+              }
+            </td>
+            <td class="shop-td-name">
+              <span class="shop-item-id">#@{"%04d".format(item.id)}</span>
+              <span class="shop-item-name">@item.name.replace("-", " ").toUpperCase</span>
+            </td>
+            <td class="shop-td-cat">
+              <span class="shop-item-cat">@item.category.replace("-", " ").toUpperCase</span>
+            </td>
+            <td class="shop-td-price">
+              @if(item.cost == 0) {
+                <span class="shop-price shop-price-free">—</span>
+              } else {
+                <span class="shop-price">@{"%,d".format(item.cost)} ₽</span>
+              }
+            </td>
+            <td class="shop-td-effect">
+              @if(item.shortEffect.nonEmpty && item.shortEffect != "—") {
+                <span class="shop-effect">@item.shortEffect</span>
+              } else {
+                <span class="shop-effect shop-effect-empty">—</span>
+              }
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
   </div>
 
   @if(totalPages > 1) {

@@ -911,84 +911,123 @@ body {
    OBJETOS
    ═══════════════════════════════════════════════════ */
 
-.items-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 1rem;
+/* ═══════════════════════════════════════════════════
+   OBJETOS — Tabla estilo Poké Mart
+   ═══════════════════════════════════════════════════ */
+
+.shop-wrap {
+  overflow-x: auto;
 }
 
-.item-card {
-  background: var(--card-cream);
+.shop-table {
+  width: 100%;
+  border-collapse: collapse;
   border: 3px solid var(--black);
   box-shadow: var(--shadow-hard);
-  display: flex;
-  gap: 0.8rem;
-  padding: 0.8rem;
-  color: var(--black);
-  align-items: flex-start;
 }
 
-.item-sprite-wrap {
-  flex-shrink: 0;
-  width: 48px;
-  height: 48px;
-  border: 2px solid var(--black);
-  background: #e0dbd0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.shop-table thead {
+  background: var(--black);
 }
 
-.item-sprite { width: 48px; height: 48px; image-rendering: pixelated; }
-
-.item-sprite-missing {
+.shop-table th {
   font-family: 'Press Start 2P', monospace;
-  font-size: 1.2rem;
+  font-size: 0.4rem;
+  color: var(--white);
+  padding: 10px 12px;
+  text-align: left;
+  letter-spacing: 1px;
+  white-space: nowrap;
+}
+
+.shop-th-sprite  { width: 52px; text-align: center; }
+.shop-th-price   { text-align: right; }
+
+.shop-row {
+  background: var(--card-cream);
+  border-bottom: 2px solid rgba(0,0,0,0.12);
+}
+
+.shop-row:nth-child(even) { background: #ede8de; }
+
+.shop-row:hover { background: #ddd8cc; }
+
+.shop-td-sprite {
+  padding: 6px 8px;
+  text-align: center;
+  width: 52px;
+}
+
+.shop-sprite {
+  width: 40px;
+  height: 40px;
+  image-rendering: pixelated;
+  display: block;
+  margin: 0 auto;
+}
+
+.shop-sprite-missing {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 1rem;
   color: #aaa;
 }
 
-.item-info {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-  min-width: 0;
+.shop-td-name {
+  padding: 8px 12px;
+  min-width: 160px;
 }
 
-.item-id {
+.shop-item-id {
+  display: block;
   font-family: 'Press Start 2P', monospace;
   font-size: 0.32rem;
-  color: #888;
+  color: #999;
+  margin-bottom: 3px;
 }
 
-.item-name {
+.shop-item-name {
   font-family: 'Press Start 2P', monospace;
-  font-size: 0.38rem;
+  font-size: 0.45rem;
   color: var(--black);
   line-height: 1.6;
-  word-break: break-word;
 }
 
-.item-category {
+.shop-td-cat { padding: 8px 12px; }
+
+.shop-item-cat {
   font-family: 'Press Start 2P', monospace;
-  font-size: 0.3rem;
+  font-size: 0.32rem;
   color: var(--red-dark);
+  background: rgba(204,34,0,0.08);
+  padding: 3px 6px;
+  border: 1px solid rgba(204,34,0,0.2);
+  white-space: nowrap;
 }
 
-.item-cost {
+.shop-td-price {
+  padding: 8px 12px;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.shop-price {
   font-family: 'VT323', monospace;
-  font-size: 1.1rem;
+  font-size: 1.3rem;
   color: #5a4a00;
 }
 
-.item-effect {
+.shop-price-free { color: #999; }
+
+.shop-td-effect { padding: 8px 12px; }
+
+.shop-effect {
   font-family: 'VT323', monospace;
-  font-size: 0.95rem;
+  font-size: 1.1rem;
   color: #444;
   line-height: 1.3;
-  border-top: 1px solid rgba(0,0,0,0.1);
-  padding-top: 4px;
-  margin-top: 2px;
 }
+
+.shop-effect-empty { color: #bbb; }
 
 /* ═══════════════════════════════════════════════════
    BAYAS
