@@ -685,6 +685,7 @@ body {
 .moves-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: 1fr;
   gap: 0.6rem;
 }
 
@@ -697,6 +698,7 @@ body {
   flex-direction: column;
   gap: 0.3rem;
   color: var(--black);
+  height: 100%;
 }
 
 .move-card-top {
@@ -765,6 +767,7 @@ body {
   border-top: 1px solid rgba(0,0,0,0.1);
   padding-top: 4px;
   line-height: 1.3;
+  flex: 1;
 }
 
 /* ═══════════════════════════════════════════════════
