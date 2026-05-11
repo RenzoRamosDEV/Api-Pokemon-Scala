@@ -1058,13 +1058,13 @@ body {
 
 .berry-id {
   font-family: 'Press Start 2P', monospace;
-  font-size: 0.38rem;
+  font-size: 0.45rem;
   color: #888;
 }
 
 .berry-name {
   font-family: 'Press Start 2P', monospace;
-  font-size: 0.42rem;
+  font-size: 0.55rem;
   color: var(--black);
   line-height: 1.6;
 }
@@ -1085,13 +1085,13 @@ body {
 
 .berry-stat-label {
   font-family: 'Press Start 2P', monospace;
-  font-size: 0.28rem;
+  font-size: 0.38rem;
   color: #666;
 }
 
 .berry-stat-value {
   font-family: 'VT323', monospace;
-  font-size: 1.1rem;
+  font-size: 1.3rem;
   color: var(--black);
 }
 
@@ -1105,8 +1105,8 @@ body {
 
 .berry-flavor {
   font-family: 'Press Start 2P', monospace;
-  font-size: 0.3rem;
-  padding: 3px 6px;
+  font-size: 0.4rem;
+  padding: 4px 7px;
   border: 2px solid var(--black);
   color: var(--white);
   background: #555;
