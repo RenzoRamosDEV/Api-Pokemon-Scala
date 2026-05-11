@@ -1025,8 +1025,8 @@ td.stat-down { color: #882222; font-weight: bold; }
   overflow-x: auto;
   overflow-y: auto;
   max-height: calc(100vh - 170px);
-  border: 3px solid var(--black);
-  box-shadow: var(--shadow-hard);
+  display: flex;
+  justify-content: center;
 }
 
 .type-matrix {
