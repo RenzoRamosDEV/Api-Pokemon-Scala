@@ -713,8 +713,8 @@ body {
 
 .damage-class {
   font-family: 'Press Start 2P', monospace;
-  font-size: 0.35rem;
-  padding: 3px 6px;
+  font-size: 0.42rem;
+  padding: 4px 8px;
   border: 2px solid var(--black);
   margin-left: auto;
 }
