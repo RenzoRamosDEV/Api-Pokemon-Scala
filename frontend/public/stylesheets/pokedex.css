@@ -782,27 +782,27 @@ body {
 .flavor-wheel {
   position: relative;
   width: 100%;
-  max-width: 1100px;
-  height: calc(100vh - 170px);
+  max-width: 860px;
+  height: 490px;
   margin: 0 auto;
 }
 
 .flavor-node {
   position: absolute;
-  width: 190px;
+  width: 240px;
   border: 3px solid var(--black);
   box-shadow: var(--shadow-hard);
   background: var(--card-cream);
   transform: translateX(-50%);
 }
 
-/* Pentagon positions */
-.fn-spicy   { left: 50%;  top: 2%;   }
-.fn-dry     { left: 90%;  top: 28%;  }
-.fn-sweet   { left: 74%;  top: 72%;  }
-.fn-bitter  { left: 26%;  top: 72%;  }
-.fn-sour    { left: 10%;  top: 28%;  }
-.fn-neutral { left: 50%;  top: 38%;  }
+/* Pentagon positions — compacto */
+.fn-spicy   { left: 50%;  top: 0%;   }
+.fn-dry     { left: 85%;  top: 22%;  }
+.fn-sweet   { left: 71%;  top: 62%;  }
+.fn-bitter  { left: 29%;  top: 62%;  }
+.fn-sour    { left: 15%;  top: 22%;  }
+.fn-neutral { left: 50%;  top: 30%;  }
 
 .flavor-header {
   font-family: 'Press Start 2P', monospace;
