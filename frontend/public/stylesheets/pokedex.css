@@ -725,7 +725,7 @@ body {
 
 .move-name {
   font-family: 'Press Start 2P', monospace;
-  font-size: 0.45rem;
+  font-size: 0.65rem;
   color: var(--black);
   line-height: 1.6;
 }
