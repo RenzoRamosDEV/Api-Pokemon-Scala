@@ -73,7 +73,7 @@ case class Ability(
 
 object GameModels:
 
-  private def englishShortEffect(entries: JsValue): String =
+  private def englishShortEffect(entries: JsLookupResult): String =
     entries.asOpt[JsArray]
       .flatMap(_.value.find(e => (e \ "language" \ "name").asOpt[String].contains("en")))
       .flatMap(e => (e \ "shortEffect").asOpt[String])
@@ -82,7 +82,7 @@ object GameModels:
   private def nameOf(json: JsValue, field: String): Option[String] =
     (json \ field \ "name").asOpt[String]
 
-  private def namesOf(json: JsValue, field: String): List[String] =
+  private def namesOf(json: JsLookupResult, field: String): List[String] =
     (json \ field).asOpt[JsArray]
       .map(_.value.flatMap(v => (v \ "name").asOpt[String]).toList)
       .getOrElse(Nil)
