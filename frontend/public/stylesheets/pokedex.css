@@ -1,0 +1,574 @@
+/* ═══════════════════════════════════════════════════
+   POKÉDEX RETRO — Pure CSS, no JS
+   Font: Press Start 2P (headers), VT323 (body text)
+   ═══════════════════════════════════════════════════ */
+
+/* ── Reset & Base ────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --black:      #0d0d0d;
+  --white:      #f5f0e8;
+  --red:        #cc2200;
+  --red-dark:   #991a00;
+  --red-light:  #ff3311;
+  --yellow:     #f5c400;
+  --green:      #00aa44;
+  --screen-bg:  #1a2e1a;
+  --card-cream: #f5f0e8;
+  --shadow:     #0d0d0d;
+  --border:     3px solid var(--black);
+  --shadow-hard: 4px 4px 0 var(--shadow);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'VT323', monospace;
+  font-size: 18px;
+  background-color: var(--screen-bg);
+  background-image:
+    linear-gradient(rgba(0,170,68,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,170,68,0.03) 1px, transparent 1px);
+  background-size: 32px 32px;
+  color: var(--white);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Header ──────────────────────────────────────── */
+.site-header {
+  background: var(--red);
+  border-bottom: 4px solid var(--black);
+  padding: 0 1.5rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 4px 0 var(--red-dark);
+}
+
+.header-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  height: 56px;
+}
+
+.header-logo {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.logo-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid var(--black);
+  display: block;
+}
+
+.logo-dot.red    { background: var(--red-light); box-shadow: 0 0 6px #ff6644; }
+.logo-dot.yellow { background: var(--yellow); }
+.logo-dot.green  { background: var(--green); }
+
+.site-title {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 1.1rem;
+  color: var(--white);
+  text-shadow: 2px 2px 0 var(--black);
+  flex: 1;
+  text-align: center;
+  letter-spacing: 2px;
+}
+
+.header-badge {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.5rem;
+  background: var(--yellow);
+  color: var(--black);
+  padding: 4px 8px;
+  border: 2px solid var(--black);
+  box-shadow: var(--shadow-hard);
+}
+
+/* ── Main ────────────────────────────────────────── */
+.site-main {
+  flex: 1;
+  max-width: 1280px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 2rem 1.5rem;
+}
+
+/* ── Pokémon Grid ────────────────────────────────── */
+.pokedex-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1.5rem;
+}
+
+/* ── Card ────────────────────────────────────────── */
+.card-link {
+  text-decoration: none;
+  display: block;
+}
+
+.poke-card {
+  border: 3px solid var(--black);
+  box-shadow: var(--shadow-hard);
+  border-radius: 0;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 80ms ease, box-shadow 80ms ease;
+  background: var(--red);
+}
+
+.card-link:hover .poke-card {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 var(--shadow);
+}
+
+.card-link:active .poke-card {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 var(--shadow);
+}
+
+.card-top {
+  background: var(--red);
+  padding: 0.6rem 0.6rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.card-number {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.5rem;
+  color: rgba(255,255,255,0.7);
+  align-self: flex-start;
+}
+
+.card-sprite-wrap {
+  width: 96px;
+  height: 96px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.card-sprite-wrap::before {
+  content: '';
+  position: absolute;
+  inset: 8px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.15);
+}
+
+.card-sprite {
+  width: 96px;
+  height: 96px;
+  image-rendering: pixelated;
+  position: relative;
+  filter: drop-shadow(1px 2px 0 rgba(0,0,0,0.4));
+}
+
+.card-sprite-missing {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 2rem;
+  color: rgba(255,255,255,0.4);
+  width: 96px;
+  height: 96px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-bottom {
+  background: var(--card-cream);
+  border-top: 3px solid var(--black);
+  padding: 0.5rem;
+  text-align: center;
+}
+
+.card-name {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.45rem;
+  color: var(--black);
+  margin-bottom: 0.4rem;
+  line-height: 1.6;
+  word-break: break-word;
+}
+
+.card-types {
+  display: flex;
+  gap: 4px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* ── Type Badges ─────────────────────────────────── */
+.type-badge {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.35rem;
+  padding: 3px 6px;
+  border: 2px solid rgba(0,0,0,0.4);
+  color: var(--white);
+  text-shadow: 1px 1px 0 rgba(0,0,0,0.5);
+  letter-spacing: 0.5px;
+}
+
+.type-normal   { background: #787858; }
+.type-fire     { background: #c03000; }
+.type-water    { background: #2060c0; }
+.type-electric { background: #a89000; }
+.type-grass    { background: #408030; }
+.type-ice      { background: #6090a0; }
+.type-fighting { background: #903028; }
+.type-poison   { background: #682070; }
+.type-ground   { background: #887830; }
+.type-flying   { background: #6850b0; }
+.type-psychic  { background: #a01840; }
+.type-bug      { background: #607020; }
+.type-rock     { background: #786820; }
+.type-ghost    { background: #483870; }
+.type-dragon   { background: #4010a8; }
+.type-dark     { background: #483820; }
+.type-steel    { background: #686878; }
+.type-fairy    { background: #a04060; }
+
+/* ── Modal ───────────────────────────────────────── */
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.modal:target {
+  display: flex;
+}
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(13, 13, 13, 0.85);
+}
+
+.modal-close-area {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+
+.modal-panel {
+  position: relative;
+  background: var(--card-cream);
+  border: 4px solid var(--black);
+  box-shadow: 8px 8px 0 var(--black);
+  max-width: 680px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  color: var(--black);
+}
+
+.modal-close {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.7rem;
+  color: var(--white);
+  background: var(--black);
+  border: 2px solid var(--black);
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  z-index: 10;
+  box-shadow: 2px 2px 0 #555;
+  transition: transform 80ms;
+}
+
+.modal-close:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0 #555;
+}
+
+.modal-header {
+  background: var(--red);
+  border-bottom: 4px solid var(--black);
+  padding: 1rem 1.2rem;
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+}
+
+.modal-number {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.6rem;
+  color: rgba(255,255,255,0.7);
+}
+
+.modal-name {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.9rem;
+  color: var(--white);
+  text-shadow: 2px 2px 0 var(--black);
+  letter-spacing: 1px;
+}
+
+.modal-body {
+  display: flex;
+  gap: 0;
+}
+
+.modal-sprite-col {
+  background: var(--red);
+  border-right: 4px solid var(--black);
+  padding: 1.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+  min-width: 160px;
+}
+
+.modal-sprite {
+  width: 128px;
+  height: 128px;
+  image-rendering: pixelated;
+  filter: drop-shadow(2px 4px 0 rgba(0,0,0,0.5));
+}
+
+.modal-sprite-missing {
+  width: 128px;
+  height: 128px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 3rem;
+  color: rgba(255,255,255,0.4);
+}
+
+.modal-types {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+}
+
+.modal-data-col {
+  padding: 1rem 1.2rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* ── Modal Sections ──────────────────────────────── */
+.modal-section { display: flex; flex-direction: column; gap: 0.5rem; }
+
+.section-title {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.5rem;
+  color: var(--red-dark);
+  border-bottom: 2px solid var(--black);
+  padding-bottom: 4px;
+  letter-spacing: 1px;
+}
+
+/* ── Data Table ──────────────────────────────────── */
+.data-table { width: 100%; border-collapse: collapse; }
+
+.data-table tr:not(:last-child) td {
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+.data-label {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.4rem;
+  color: #555;
+  padding: 5px 8px 5px 0;
+  width: 55%;
+}
+
+.data-value {
+  font-family: 'VT323', monospace;
+  font-size: 1.2rem;
+  color: var(--black);
+  font-weight: bold;
+}
+
+/* ── Ability List ────────────────────────────────── */
+.ability-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ability-item {
+  font-family: 'VT323', monospace;
+  font-size: 1.1rem;
+  color: var(--black);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ability-item.hidden { color: #666; }
+
+.hidden-tag {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.3rem;
+  background: var(--black);
+  color: var(--yellow);
+  padding: 2px 5px;
+}
+
+/* ── Stat Bars ───────────────────────────────────── */
+.stats-list { display: flex; flex-direction: column; gap: 6px; }
+
+.stat-row {
+  display: grid;
+  grid-template-columns: 52px 36px 1fr;
+  align-items: center;
+  gap: 6px;
+}
+
+.stat-label {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.32rem;
+  color: #555;
+  text-align: right;
+}
+
+.stat-value {
+  font-family: 'VT323', monospace;
+  font-size: 1.1rem;
+  color: var(--black);
+  text-align: right;
+  line-height: 1;
+}
+
+.stat-bar-track {
+  height: 10px;
+  background: rgba(0,0,0,0.12);
+  border: 2px solid var(--black);
+  overflow: hidden;
+}
+
+.stat-bar-fill {
+  height: 100%;
+  min-width: 4px;
+  transition: width 0.3s ease;
+  opacity: 0.85;
+}
+
+/* ── Pagination ──────────────────────────────────── */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2.5rem;
+  padding: 1rem 0;
+}
+
+.page-btn {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.55rem;
+  color: var(--white);
+  background: var(--red);
+  border: 3px solid var(--black);
+  box-shadow: var(--shadow-hard);
+  padding: 10px 16px;
+  text-decoration: none;
+  display: inline-block;
+  transition: transform 80ms, box-shadow 80ms;
+}
+
+.page-btn:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 var(--shadow);
+}
+
+.page-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 var(--shadow);
+}
+
+.page-btn.disabled {
+  background: #444;
+  color: #888;
+  cursor: not-allowed;
+  box-shadow: 2px 2px 0 var(--shadow);
+}
+
+.page-info {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.55rem;
+  color: var(--yellow);
+  text-shadow: 1px 1px 0 var(--black);
+}
+
+/* ── Footer ──────────────────────────────────────── */
+.site-footer {
+  background: var(--black);
+  color: #555;
+  text-align: center;
+  padding: 1rem;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.4rem;
+  letter-spacing: 1px;
+}
+
+/* ── Responsive ──────────────────────────────────── */
+@media (max-width: 640px) {
+  .pokedex-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 1rem;
+  }
+
+  .site-title { font-size: 0.75rem; }
+
+  .modal-body { flex-direction: column; }
+
+  .modal-sprite-col {
+    border-right: none;
+    border-bottom: 4px solid var(--black);
+    padding: 1rem;
+    flex-direction: row;
+    min-width: unset;
+    justify-content: center;
+  }
+
+  .modal-sprite { width: 96px; height: 96px; }
+
+  .modal-types { flex-direction: row; }
+
+  .stat-label { font-size: 0.28rem; }
+}
+
+@media (max-width: 400px) {
+  .pokedex-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
