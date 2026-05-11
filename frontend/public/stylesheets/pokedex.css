@@ -775,48 +775,88 @@ body {
    NATURALEZAS
    ═══════════════════════════════════════════════════ */
 
-.table-wrap { overflow-x: auto; }
+/* ═══════════════════════════════════════════════════
+   NATURALEZAS — Rueda de sabores (pentágono)
+   ═══════════════════════════════════════════════════ */
 
-.natures-table {
+.flavor-wheel {
+  position: relative;
   width: 100%;
-  border-collapse: collapse;
-  border: 3px solid var(--black);
+  max-width: 860px;
+  height: 620px;
+  margin: 0 auto;
 }
 
-.natures-table th {
+.flavor-node {
+  position: absolute;
+  width: 155px;
+  border: 3px solid var(--black);
+  box-shadow: var(--shadow-hard);
+  background: var(--card-cream);
+  transform: translateX(-50%);
+}
+
+/* Pentagon positions */
+.fn-spicy  { left: 50%;   top: 0%;   }
+.fn-dry    { left: 88%;   top: 28%;  }
+.fn-sweet  { left: 73%;   top: 72%;  }
+.fn-bitter { left: 27%;   top: 72%;  }
+.fn-sour   { left: 12%;   top: 28%;  }
+.fn-neutral { left: 50%;  top: 36%;  }
+
+.flavor-header {
   font-family: 'Press Start 2P', monospace;
-  font-size: 0.4rem;
-  background: var(--black);
+  font-size: 0.5rem;
   color: var(--white);
-  padding: 10px 12px;
-  text-align: left;
-  letter-spacing: 1px;
+  padding: 6px 8px;
+  text-align: center;
+  border-bottom: 3px solid var(--black);
+}
+
+.flavor-spicy  { background: #c03000; }
+.flavor-dry    { background: #2060c0; }
+.flavor-sweet  { background: #c060a0; }
+.flavor-bitter { background: #407030; }
+.flavor-sour   { background: #a09000; }
+.flavor-neutral { background: #555; }
+
+.flavor-stat-label {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.35rem;
+  color: #555;
+  text-align: center;
+  padding: 4px 6px;
+  border-bottom: 2px solid rgba(0,0,0,0.15);
+  background: #ece7dd;
+}
+
+.flavor-natures {
+  list-style: none;
+  padding: 4px 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.flavor-natures li {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.fn-name {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.38rem;
+  color: var(--black);
+}
+
+.fn-down {
+  font-family: 'VT323', monospace;
+  font-size: 0.85rem;
+  color: #882222;
   white-space: nowrap;
 }
-
-.natures-table th.stat-up  { color: var(--green); }
-.natures-table th.stat-down { color: #ff6666; }
-
-.nature-row {
-  border-bottom: 2px solid var(--black);
-  background: var(--card-cream);
-}
-
-.nature-row:nth-child(even) { background: #ede8de; }
-.nature-row.neutral { background: #e8e8e8; }
-
-.natures-table td {
-  font-family: 'VT323', monospace;
-  font-size: 1.2rem;
-  padding: 8px 12px;
-}
-
-.nature-id   { color: #888; font-size: 1rem !important; }
-.nature-name { font-family: 'Press Start 2P', monospace !important; font-size: 0.4rem !important; color: var(--black); }
-td.stat-up   { color: #226622; font-weight: bold; }
-td.stat-down { color: #882222; font-weight: bold; }
-.flavor-likes { color: #226622; }
-.flavor-hates { color: #882222; }
 
 /* ═══════════════════════════════════════════════════
    OBJETOS
@@ -1192,7 +1232,8 @@ td.stat-down { color: #882222; font-weight: bold; }
     min-width: unset;
   }
 
-  .natures-table { font-size: 0.85rem; }
+  .flavor-wheel { height: auto; display: flex; flex-direction: column; gap: 0.8rem; }
+  .flavor-node  { position: static; transform: none; width: 100%; }
   .move-stats { grid-template-columns: repeat(2, 1fr); }
 }
 

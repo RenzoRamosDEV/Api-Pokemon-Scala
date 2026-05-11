@@ -5,34 +5,100 @@
     <h2 class="page-title">NATURALEZAS</h2>
   </div>
 
-  <div class="table-wrap">
-    <table class="natures-table">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>NOMBRE</th>
-          <th class="stat-up">STAT +</th>
-          <th class="stat-down">STAT -</th>
-          <th>LE GUSTA</th>
-          <th>ODIA</th>
-        </tr>
-      </thead>
-      <tbody>
-        @for(n <- natures) {
-          <tr class="nature-row @if(n.increasedStat.isEmpty){neutral}">
-            <td class="nature-id">#@{"%02d".format(n.id)}</td>
-            <td class="nature-name">@n.name.toUpperCase</td>
-            <td class="stat-up">
-              @n.increasedStat.map(s => s.replace("-", " ").toUpperCase).getOrElse("—")
-            </td>
-            <td class="stat-down">
-              @n.decreasedStat.map(s => s.replace("-", " ").toUpperCase).getOrElse("—")
-            </td>
-            <td class="flavor-likes">@n.likesFlavor.map(_.toUpperCase).getOrElse("—")</td>
-            <td class="flavor-hates">@n.hatesFlavor.map(_.toUpperCase).getOrElse("—")</td>
-          </tr>
-        }
-      </tbody>
-    </table>
-  </div>
+  @defining(
+    Map(
+      "spicy"  -> natures.filter(_.likesFlavor.contains("spicy")),
+      "dry"    -> natures.filter(_.likesFlavor.contains("dry")),
+      "sweet"  -> natures.filter(_.likesFlavor.contains("sweet")),
+      "bitter" -> natures.filter(_.likesFlavor.contains("bitter")),
+      "sour"   -> natures.filter(_.likesFlavor.contains("sour")),
+      "neutral"-> natures.filter(_.likesFlavor.isEmpty)
+    )
+  ) { groups =>
+
+    <div class="flavor-wheel">
+
+      @* TOP — SPICY *@
+      <div class="flavor-node fn-spicy">
+        <div class="flavor-header flavor-spicy">SPICY</div>
+        <div class="flavor-stat-label">↑ ATTACK</div>
+        <ul class="flavor-natures">
+          @for(n <- groups("spicy").sortBy(_.name)) {
+            <li>
+              <span class="fn-name">@n.name.replace("-"," ").toUpperCase</span>
+              <span class="fn-down">↓@n.decreasedStat.map(_.replace("-"," ").toUpperCase).getOrElse("")</span>
+            </li>
+          }
+        </ul>
+      </div>
+
+      @* TOP-RIGHT — DRY *@
+      <div class="flavor-node fn-dry">
+        <div class="flavor-header flavor-dry">DRY</div>
+        <div class="flavor-stat-label">↑ SP.ATK</div>
+        <ul class="flavor-natures">
+          @for(n <- groups("dry").sortBy(_.name)) {
+            <li>
+              <span class="fn-name">@n.name.replace("-"," ").toUpperCase</span>
+              <span class="fn-down">↓@n.decreasedStat.map(_.replace("-"," ").toUpperCase).getOrElse("")</span>
+            </li>
+          }
+        </ul>
+      </div>
+
+      @* BOTTOM-RIGHT — SWEET *@
+      <div class="flavor-node fn-sweet">
+        <div class="flavor-header flavor-sweet">SWEET</div>
+        <div class="flavor-stat-label">↑ SPEED</div>
+        <ul class="flavor-natures">
+          @for(n <- groups("sweet").sortBy(_.name)) {
+            <li>
+              <span class="fn-name">@n.name.replace("-"," ").toUpperCase</span>
+              <span class="fn-down">↓@n.decreasedStat.map(_.replace("-"," ").toUpperCase).getOrElse("")</span>
+            </li>
+          }
+        </ul>
+      </div>
+
+      @* BOTTOM-LEFT — BITTER *@
+      <div class="flavor-node fn-bitter">
+        <div class="flavor-header flavor-bitter">BITTER</div>
+        <div class="flavor-stat-label">↑ SP.DEF</div>
+        <ul class="flavor-natures">
+          @for(n <- groups("bitter").sortBy(_.name)) {
+            <li>
+              <span class="fn-name">@n.name.replace("-"," ").toUpperCase</span>
+              <span class="fn-down">↓@n.decreasedStat.map(_.replace("-"," ").toUpperCase).getOrElse("")</span>
+            </li>
+          }
+        </ul>
+      </div>
+
+      @* TOP-LEFT — SOUR *@
+      <div class="flavor-node fn-sour">
+        <div class="flavor-header flavor-sour">SOUR</div>
+        <div class="flavor-stat-label">↑ DEFENSE</div>
+        <ul class="flavor-natures">
+          @for(n <- groups("sour").sortBy(_.name)) {
+            <li>
+              <span class="fn-name">@n.name.replace("-"," ").toUpperCase</span>
+              <span class="fn-down">↓@n.decreasedStat.map(_.replace("-"," ").toUpperCase).getOrElse("")</span>
+            </li>
+          }
+        </ul>
+      </div>
+
+      @* CENTER — NEUTRAL *@
+      <div class="flavor-node fn-neutral">
+        <div class="flavor-header flavor-neutral">NEUTRAL</div>
+        <div class="flavor-stat-label">SIN CAMBIO</div>
+        <ul class="flavor-natures">
+          @for(n <- groups("neutral").sortBy(_.name)) {
+            <li><span class="fn-name">@n.name.replace("-"," ").toUpperCase</span></li>
+          }
+        </ul>
+      </div>
+
+    </div>
+  }
 }
