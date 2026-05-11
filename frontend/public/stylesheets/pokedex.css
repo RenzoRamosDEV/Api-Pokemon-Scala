@@ -776,87 +776,135 @@ body {
    ═══════════════════════════════════════════════════ */
 
 /* ═══════════════════════════════════════════════════
-   NATURALEZAS — Rueda de sabores (pentágono)
+   NATURALEZAS — Acordeón por stat
    ═══════════════════════════════════════════════════ */
 
-.flavor-wheel {
-  position: relative;
-  width: 100%;
+.stat-accordion {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
   max-width: 860px;
-  height: 490px;
   margin: 0 auto;
 }
 
-.flavor-node {
-  position: absolute;
-  width: 240px;
+.acc-toggle {
+  display: none;
+}
+
+.acc-section {
   border: 3px solid var(--black);
   box-shadow: var(--shadow-hard);
-  background: var(--card-cream);
-  transform: translateX(-50%);
 }
 
-/* Pentagon positions — compacto */
-.fn-spicy   { left: 50%;  top: 0%;   }
-.fn-dry     { left: 85%;  top: 22%;  }
-.fn-sweet   { left: 71%;  top: 62%;  }
-.fn-bitter  { left: 29%;  top: 62%;  }
-.fn-sour    { left: 15%;  top: 22%;  }
-.fn-neutral { left: 50%;  top: 30%;  }
+.acc-header {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  background: var(--black);
+  padding: 0.7rem 1rem;
+  cursor: pointer;
+  user-select: none;
+}
 
-.flavor-header {
+.acc-icon {
+  font-size: 1.2rem;
+}
+
+.acc-stat-name {
   font-family: 'Press Start 2P', monospace;
-  font-size: 0.65rem;
+  font-size: 0.6rem;
   color: var(--white);
-  padding: 8px 10px;
-  text-align: center;
-  border-bottom: 3px solid var(--black);
+  flex: 1;
 }
 
-.flavor-spicy  { background: #c03000; }
-.flavor-dry    { background: #2060c0; }
-.flavor-sweet  { background: #c060a0; }
-.flavor-bitter { background: #407030; }
-.flavor-sour   { background: #a09000; }
-.flavor-neutral { background: #555; }
-
-.flavor-stat-label {
-  font-family: 'Press Start 2P', monospace;
-  font-size: 0.45rem;
-  color: #555;
-  text-align: center;
-  padding: 5px 6px;
-  border-bottom: 2px solid rgba(0,0,0,0.15);
-  background: #ece7dd;
+.acc-counts {
+  display: flex;
+  gap: 0.8rem;
 }
 
-.flavor-natures {
-  list-style: none;
-  padding: 4px 6px;
+.acc-count-up {
+  font-family: 'VT323', monospace;
+  font-size: 1.1rem;
+  color: #6fcf6f;
+}
+
+.acc-count-down {
+  font-family: 'VT323', monospace;
+  font-size: 1.1rem;
+  color: #ff8080;
+}
+
+.acc-arrow {
+  font-size: 0.6rem;
+  color: var(--white);
+  transition: transform 0.15s ease;
+  display: inline-block;
+}
+
+.acc-toggle:checked ~ .acc-header .acc-arrow {
+  transform: rotate(90deg);
+}
+
+.acc-body {
+  display: none;
+  background: var(--card-cream);
+  border-top: 3px solid var(--black);
+}
+
+.acc-toggle:checked ~ .acc-body {
+  display: flex;
+}
+
+.acc-col {
+  flex: 1;
+  padding: 0.6rem 0.8rem;
+}
+
+.acc-col + .acc-col {
+  border-left: 3px solid var(--black);
+}
+
+.acc-neutral-list {
+  width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 3px;
 }
 
-.flavor-natures li {
+.acc-col-header {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.38rem;
+  color: #888;
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 2px solid rgba(0,0,0,0.15);
+}
+
+.acc-up   .acc-col-header { color: #226622; }
+.acc-down .acc-col-header { color: #882222; }
+
+.acc-nature-row {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  gap: 4px;
+  padding: 3px 0;
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+  gap: 0.5rem;
 }
 
-.fn-name {
+.acc-nature-name {
   font-family: 'Press Start 2P', monospace;
   font-size: 0.45rem;
   color: var(--black);
 }
 
-.fn-down {
+.acc-nature-sub {
   font-family: 'VT323', monospace;
   font-size: 1rem;
-  color: #882222;
   white-space: nowrap;
 }
+
+.acc-up   .acc-nature-sub { color: #882222; }
+.acc-down .acc-nature-sub { color: #226622; }
 
 /* ═══════════════════════════════════════════════════
    OBJETOS
@@ -1232,8 +1280,8 @@ body {
     min-width: unset;
   }
 
-  .flavor-wheel { height: auto; display: flex; flex-direction: column; gap: 0.8rem; }
-  .flavor-node  { position: static; transform: none; width: 100%; }
+  .acc-body { flex-direction: column; }
+  .acc-col + .acc-col { border-left: none; border-top: 3px solid var(--black); }
   .move-stats { grid-template-columns: repeat(2, 1fr); }
 }
 
