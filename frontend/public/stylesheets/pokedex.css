@@ -782,14 +782,14 @@ body {
 .flavor-wheel {
   position: relative;
   width: 100%;
-  max-width: 860px;
-  height: 620px;
+  max-width: 1100px;
+  height: calc(100vh - 170px);
   margin: 0 auto;
 }
 
 .flavor-node {
   position: absolute;
-  width: 155px;
+  width: 190px;
   border: 3px solid var(--black);
   box-shadow: var(--shadow-hard);
   background: var(--card-cream);
@@ -797,18 +797,18 @@ body {
 }
 
 /* Pentagon positions */
-.fn-spicy  { left: 50%;   top: 0%;   }
-.fn-dry    { left: 88%;   top: 28%;  }
-.fn-sweet  { left: 73%;   top: 72%;  }
-.fn-bitter { left: 27%;   top: 72%;  }
-.fn-sour   { left: 12%;   top: 28%;  }
-.fn-neutral { left: 50%;  top: 36%;  }
+.fn-spicy   { left: 50%;  top: 2%;   }
+.fn-dry     { left: 90%;  top: 28%;  }
+.fn-sweet   { left: 74%;  top: 72%;  }
+.fn-bitter  { left: 26%;  top: 72%;  }
+.fn-sour    { left: 10%;  top: 28%;  }
+.fn-neutral { left: 50%;  top: 38%;  }
 
 .flavor-header {
   font-family: 'Press Start 2P', monospace;
-  font-size: 0.5rem;
+  font-size: 0.65rem;
   color: var(--white);
-  padding: 6px 8px;
+  padding: 8px 10px;
   text-align: center;
   border-bottom: 3px solid var(--black);
 }
@@ -822,10 +822,10 @@ body {
 
 .flavor-stat-label {
   font-family: 'Press Start 2P', monospace;
-  font-size: 0.35rem;
+  font-size: 0.45rem;
   color: #555;
   text-align: center;
-  padding: 4px 6px;
+  padding: 5px 6px;
   border-bottom: 2px solid rgba(0,0,0,0.15);
   background: #ece7dd;
 }
@@ -847,13 +847,13 @@ body {
 
 .fn-name {
   font-family: 'Press Start 2P', monospace;
-  font-size: 0.38rem;
+  font-size: 0.45rem;
   color: var(--black);
 }
 
 .fn-down {
   font-family: 'VT323', monospace;
-  font-size: 0.85rem;
+  font-size: 1rem;
   color: #882222;
   white-space: nowrap;
 }
