@@ -18,7 +18,7 @@ class ItemsController @Inject() (
     extends AbstractController(cc):
 
   private val baseUrl  = config.get[String]("pokeapi.base-url")
-  private val pageSize = 10
+  private val pageSize = 12
 
   def index(page: Int) = Action.async { implicit request =>
     val offset = (page - 1) * pageSize
