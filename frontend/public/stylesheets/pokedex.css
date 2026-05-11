@@ -1167,3 +1167,7 @@ td.stat-down { color: #882222; font-weight: bold; }
   .natures-table { font-size: 0.85rem; }
   .move-stats { grid-template-columns: repeat(2, 1fr); }
 }
+
+body.section-movimientos {
+  overflow: hidden;
+}
