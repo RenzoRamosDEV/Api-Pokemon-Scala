@@ -1,0 +1,56 @@
+@(types: List[models.GameType])
+@main("TIPOS — Pokédex Retro", "tipos") {
+
+  <div class="page-header">
+    <h2 class="page-title">TABLA DE TIPOS</h2>
+  </div>
+
+  <div class="matrix-legend">
+    <span class="matrix-legend-item eff-2x-cell">×2</span>
+    <span class="matrix-legend-label">Súper efectivo</span>
+    <span class="matrix-legend-item eff-half-cell">½</span>
+    <span class="matrix-legend-label">No muy efectivo</span>
+    <span class="matrix-legend-item eff-0-cell">✕</span>
+    <span class="matrix-legend-label">Inmune</span>
+    <span class="matrix-legend-item eff-1-cell">—</span>
+    <span class="matrix-legend-label">Normal</span>
+  </div>
+
+  <div class="matrix-scroll">
+    <table class="type-matrix">
+      <thead>
+        <tr>
+          <th class="matrix-corner">ATK ╲ DEF</th>
+          @for(def_t <- types) {
+            <th class="matrix-col-header">
+              <span class="type-badge type-@def_t.name">@def_t.name.toUpperCase</span>
+            </th>
+          }
+        </tr>
+      </thead>
+      <tbody>
+        @for(atk <- types) {
+          <tr>
+            <td class="matrix-row-header">
+              <span class="type-badge type-@atk.name">@atk.name.toUpperCase</span>
+            </td>
+            @for(def_t <- types) {
+              @defining(
+                if(atk.noDamageTo.contains(def_t.name)) "0"
+                else if(atk.doubleDamageTo.contains(def_t.name)) "2"
+                else if(atk.halfDamageTo.contains(def_t.name)) "h"
+                else "1"
+              ) { eff =>
+                <td class="matrix-cell eff-@eff-cell">
+                  @if(eff == "2") { ×2 }
+                  @if(eff == "h") { ½ }
+                  @if(eff == "0") { ✕ }
+                </td>
+              }
+            }
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+}

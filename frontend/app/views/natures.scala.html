@@ -1,0 +1,100 @@
+@(natures: List[models.Nature])
+@main("NATURALEZAS — Pokédex Retro", "naturalezas") {
+
+  <div class="page-header">
+    <h2 class="page-title">NATURALEZAS</h2>
+  </div>
+
+  @defining(List(
+    ("attack",          "ATTACK",          "⚔",  "#c03000"),
+    ("defense",         "DEFENSE",         "🛡", "#2060c0"),
+    ("special-attack",  "SPECIAL ATTACK",  "✨",  "#682070"),
+    ("special-defense", "SPECIAL DEFENSE", "💠",  "#407030"),
+    ("speed",           "SPEED",           "⚡",  "#a09000")
+  )) { stats =>
+
+    <div class="stat-accordion">
+
+      @for(((statKey, statLabel, icon, color), idx) <- stats.zipWithIndex) {
+        @defining(
+          natures.filter(_.increasedStat.contains(statKey)).sortBy(_.name)
+        ) { ups =>
+          @defining(
+            natures.filter(_.decreasedStat.contains(statKey)).sortBy(_.name)
+          ) { downs =>
+
+            <div class="acc-section">
+              <input type="checkbox" id="acc-@statKey" class="acc-toggle" @if(idx == 0){checked}>
+              <label for="acc-@statKey" class="acc-header" style="border-left: 6px solid @color">
+                <span class="acc-icon">@icon</span>
+                <span class="acc-stat-name">@statLabel</span>
+                <span class="acc-counts">
+                  <span class="acc-count-up">↑ @ups.size</span>
+                  <span class="acc-count-down">↓ @downs.size</span>
+                </span>
+                <span class="acc-arrow">▶</span>
+              </label>
+              <div class="acc-body">
+                <div class="acc-col acc-up">
+                  <div class="acc-col-header">↑ SUBE @statLabel</div>
+                  @for(n <- ups) {
+                    <div class="acc-nature-row">
+                      <span class="acc-nature-name">@n.name.replace("-"," ").toUpperCase</span>
+                      <span class="acc-nature-sub">↓ @n.decreasedStat.map(_.replace("-"," ").toUpperCase).getOrElse("—")</span>
+                    </div>
+                  }
+                </div>
+                <div class="acc-col acc-down">
+                  <div class="acc-col-header">↓ BAJA @statLabel</div>
+                  @for(n <- downs) {
+                    <div class="acc-nature-row">
+                      <span class="acc-nature-name">@n.name.replace("-"," ").toUpperCase</span>
+                      <span class="acc-nature-sub">↑ @n.increasedStat.map(_.replace("-"," ").toUpperCase).getOrElse("—")</span>
+                    </div>
+                  }
+                </div>
+              </div>
+            </div>
+
+          }
+        }
+      }
+
+      @* Neutral *@
+      <div class="acc-section">
+        <input type="checkbox" id="acc-neutral" class="acc-toggle">
+        <label for="acc-neutral" class="acc-header" style="border-left: 6px solid #555">
+          <span class="acc-icon">—</span>
+          <span class="acc-stat-name">NEUTRAL</span>
+          <span class="acc-counts">
+            <span class="acc-count-up">@natures.filter(_.increasedStat.isEmpty).size naturales</span>
+          </span>
+          <span class="acc-arrow">▶</span>
+        </label>
+        @defining(natures.filter(_.increasedStat.isEmpty).sortBy(_.name)) { neutrals =>
+          <div class="acc-body">
+            <div class="acc-col">
+              <div class="acc-col-header">SIN CAMBIO DE STATS</div>
+              @for(n <- neutrals.take((neutrals.size + 1) / 2)) {
+                <div class="acc-nature-row">
+                  <span class="acc-nature-name">@n.name.replace("-"," ").toUpperCase</span>
+                  <span class="acc-nature-sub acc-neutral-tag">— NEUTRAL</span>
+                </div>
+              }
+            </div>
+            <div class="acc-col">
+              <div class="acc-col-header">SIN CAMBIO DE STATS</div>
+              @for(n <- neutrals.drop((neutrals.size + 1) / 2)) {
+                <div class="acc-nature-row">
+                  <span class="acc-nature-name">@n.name.replace("-"," ").toUpperCase</span>
+                  <span class="acc-nature-sub acc-neutral-tag">— NEUTRAL</span>
+                </div>
+              }
+            </div>
+          </div>
+        }
+      </div>
+
+    </div>
+  }
+}
