@@ -1,0 +1,14 @@
+target/
+project/target/
+project/project/
+*.class
+*.jar
+*.war
+*.ear
+.bsp/
+.metals/
+.bloop/
+.idea/
+*.iml
+.vscode/
+.DS_Store
