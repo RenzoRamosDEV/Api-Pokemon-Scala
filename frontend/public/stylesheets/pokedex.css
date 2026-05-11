@@ -913,8 +913,7 @@ body {
 
 .items-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  grid-auto-rows: 1fr;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 1rem;
 }
 
@@ -927,7 +926,6 @@ body {
   padding: 0.8rem;
   color: var(--black);
   align-items: flex-start;
-  height: 100%;
 }
 
 .item-sprite-wrap {
