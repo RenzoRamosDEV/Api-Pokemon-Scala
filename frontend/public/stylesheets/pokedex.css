@@ -699,6 +699,7 @@ body {
   gap: 0.3rem;
   color: var(--black);
   height: 100%;
+  min-height: 215px;
 }
 
 .move-card-top {
