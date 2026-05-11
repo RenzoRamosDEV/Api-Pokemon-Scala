@@ -36,8 +36,7 @@ trait RouteSupport[F[_]: Concurrent]:
   // Devuelve Some(badRequest) si hay violación, None si los parámetros son válidos.
   // El límite máximo de 100 evita que una sola request sobrecargue PokeAPI.
   protected def validatePagination(limit: Int, offset: Int): Option[F[Response[F]]] =
-    if limit < 1 || limit > 100 then
-      Some(BadRequest(ApiError.badRequest("limit must be between 1 and 100").asJson))
-    else if offset < 0 then
-      Some(BadRequest(ApiError.badRequest("offset must be >= 0").asJson))
-    else None
+    (limit, offset) match
+      case (l, _) if l < 1 || l > 100 => Some(BadRequest(ApiError.badRequest("limit must be between 1 and 100").asJson))
+      case (_, o) if o < 0            => Some(BadRequest(ApiError.badRequest("offset must be >= 0").asJson))
+      case _                          => None
