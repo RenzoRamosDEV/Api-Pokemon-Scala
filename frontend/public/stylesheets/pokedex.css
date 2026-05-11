@@ -1043,7 +1043,7 @@ td.stat-down { color: #882222; font-weight: bold; }
   background: #0d0d0d;
   color: var(--white);
   font-family: 'Press Start 2P', monospace;
-  font-size: 0.3rem;
+  font-size: 0.5rem;
   padding: 8px 10px;
   text-align: center;
   white-space: nowrap;
@@ -1068,7 +1068,7 @@ td.stat-down { color: #882222; font-weight: bold; }
   writing-mode: vertical-rl;
   text-orientation: mixed;
   transform: rotate(180deg);
-  font-size: 0.42rem;
+  font-size: 0.52rem;
   padding: 6px 4px;
   display: inline-block;
   letter-spacing: 0.05em;
