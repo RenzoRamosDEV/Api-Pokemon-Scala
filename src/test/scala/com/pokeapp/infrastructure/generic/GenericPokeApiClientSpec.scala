@@ -50,11 +50,46 @@ class GenericPokeApiClientSpec extends CatsEffectSuite:
         assert(result.isRight)
         result.foreach(json => assert(json.toString.contains("298")))
 
-  test("returns RateLimitExceeded on 429"):
+  test("getByIdOrName returns RateLimitExceeded on 429"):
     val httpClient = clientWith(Status.TooManyRequests, "")
     val client     = GenericPokeApiClient[IO](httpClient, config)
 
     client
       .getByIdOrName("ability", "1")
+      .map: result =>
+        assertEquals(result, Left(DomainError.RateLimitExceeded))
+
+  // Partición error de servidor: 500 → ExternalApiError
+  test("getByIdOrName returns ExternalApiError on 500"):
+    val httpClient = clientWith(Status.InternalServerError, "")
+    val client     = GenericPokeApiClient[IO](httpClient, config)
+
+    client
+      .getByIdOrName("ability", "1")
+      .map: result =>
+        result match
+          case Left(DomainError.ExternalApiError(_, 500)) => ()
+          case other                                      => fail(s"Expected ExternalApiError(500) but got $other")
+
+  // ── list ──────────────────────────────────────────────────────────────────
+  // Particiones de equivalencia para `list`: mismas clases que getByIdOrName.
+
+  test("list returns NotFound on 404"):
+    val httpClient = clientWith(Status.NotFound, "")
+    val client     = GenericPokeApiClient[IO](httpClient, config)
+
+    client
+      .list("ability", 20, 0)
+      .map: result =>
+        result match
+          case Left(DomainError.NotFound(_)) => ()
+          case other                         => fail(s"Expected NotFound but got $other")
+
+  test("list returns RateLimitExceeded on 429"):
+    val httpClient = clientWith(Status.TooManyRequests, "")
+    val client     = GenericPokeApiClient[IO](httpClient, config)
+
+    client
+      .list("ability", 20, 0)
       .map: result =>
         assertEquals(result, Left(DomainError.RateLimitExceeded))

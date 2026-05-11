@@ -81,12 +81,40 @@ class PokemonRoutesSpec extends CatsEffectSuite:
       response.as[String].map: body =>
         assert(body.contains("1302"))
 
+  // ── Búsqueda por nombre inexistente ──────────────────────────────────────
+
+  // Partición: nombre que no existe en el repositorio → 404
+  // Complementa el test de búsqueda por nombre existente para cubrir ambas clases.
+  test("GET /api/v1/pokemon/{name} returns 404 for unknown name"):
+    val routes  = buildRoutes(repoWithPikachu).routes.orNotFound
+    val request = Request[IO](Method.GET, uri"/api/v1/pokemon/mewtwo")
+    routes.run(request).map(r => assertEquals(r.status, Status.NotFound))
+
   // ── Validación de parámetros de paginación ────────────────────────────────
+  //
+  // Particiones de equivalencia para `limit`:
+  //   [< 1]   clase inválida baja  → 400  (representante: 0)
+  //   [1..100] clase válida         → 200  (representantes frontera: 1 y 100)
+  //   [> 100] clase inválida alta  → 400  (representante: 101)
+  //
+  // Particiones de equivalencia para `offset`:
+  //   [< 0]  clase inválida → 400  (representante: -1)
+  //   [>= 0] clase válida   → 200  (representante: 0)
 
   test("GET /api/v1/pokemon?limit=0 returns 400"):
     val routes  = buildRoutes(repoWithPikachu).routes.orNotFound
     val request = Request[IO](Method.GET, uri"/api/v1/pokemon?limit=0&offset=0")
     routes.run(request).map(r => assertEquals(r.status, Status.BadRequest))
+
+  test("GET /api/v1/pokemon?limit=1 returns 200 (valor frontera mínimo válido)"):
+    val routes  = buildRoutes(repoWithPikachu).routes.orNotFound
+    val request = Request[IO](Method.GET, uri"/api/v1/pokemon?limit=1&offset=0")
+    routes.run(request).map(r => assertEquals(r.status, Status.Ok))
+
+  test("GET /api/v1/pokemon?limit=100 returns 200 (valor frontera máximo válido)"):
+    val routes  = buildRoutes(repoWithPikachu).routes.orNotFound
+    val request = Request[IO](Method.GET, uri"/api/v1/pokemon?limit=100&offset=0")
+    routes.run(request).map(r => assertEquals(r.status, Status.Ok))
 
   test("GET /api/v1/pokemon?limit=101 returns 400"):
     val routes  = buildRoutes(repoWithPikachu).routes.orNotFound

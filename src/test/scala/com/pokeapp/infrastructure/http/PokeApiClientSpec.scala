@@ -13,6 +13,12 @@ import org.http4s.client.Client
 // se traduzcan correctamente a los tipos de DomainError esperados,
 // y que el JSON se deserialice al modelo de dominio correcto.
 // Se usa Client.fromHttpApp para simular respuestas HTTP sin red real.
+//
+// Particiones de equivalencia para status HTTP:
+//   [200]       clase éxito          → Right(modelo)
+//   [404]       clase no encontrado  → Left(NotFound)
+//   [429]       clase rate limit     → Left(RateLimitExceeded)
+//   [5xx]       clase error servidor → Left(ExternalApiError)
 class PokeApiClientSpec extends CatsEffectSuite:
 
   private val config = PokeApiConfig(
@@ -62,6 +68,14 @@ class PokeApiClientSpec extends CatsEffectSuite:
     apiClient.getPokemon("pikachu").map: result =>
       assertEquals(result, Left(DomainError.RateLimitExceeded))
 
+  // Partición 5xx: cualquier error del servidor se mapea a ExternalApiError
+  test("getPokemon returns ExternalApiError on 500"):
+    val apiClient = PokeApiClient[IO](clientReturning(Status.InternalServerError, ""), config)
+    apiClient.getPokemon("pikachu").map: result =>
+      result match
+        case Left(DomainError.ExternalApiError(_, 500)) => ()
+        case other                                      => fail(s"Expected ExternalApiError(500) but got $other")
+
   // ── listPokemon ───────────────────────────────────────────────────────────
 
   test("listPokemon returns paginated response on 200"):
@@ -101,3 +115,17 @@ class PokeApiClientSpec extends CatsEffectSuite:
       result match
         case Left(DomainError.NotFound(_)) => ()
         case other                         => fail(s"Expected NotFound but got $other")
+
+  // Partición rate limit para species: misma clase que getPokemon 429
+  test("getPokemonSpecies returns RateLimitExceeded on 429"):
+    val apiClient = PokeApiClient[IO](clientReturning(Status.TooManyRequests, ""), config)
+    apiClient.getPokemonSpecies("pikachu").map: result =>
+      assertEquals(result, Left(DomainError.RateLimitExceeded))
+
+  // Partición error de servidor para species
+  test("getPokemonSpecies returns ExternalApiError on 500"):
+    val apiClient = PokeApiClient[IO](clientReturning(Status.InternalServerError, ""), config)
+    apiClient.getPokemonSpecies("pikachu").map: result =>
+      result match
+        case Left(DomainError.ExternalApiError(_, 500)) => ()
+        case other                                      => fail(s"Expected ExternalApiError(500) but got $other")

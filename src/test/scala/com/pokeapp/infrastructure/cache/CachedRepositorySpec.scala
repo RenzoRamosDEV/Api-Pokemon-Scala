@@ -54,3 +54,31 @@ class CachedRepositorySpec extends CatsEffectSuite:
       _          <- repo.findById(9999)
       calls      <- counter.get
     yield assertEquals(calls, 2)
+
+  // ── findByName ────────────────────────────────────────────────────────────
+  // Partición equivalente a findById pero con clave "name:pikachu".
+  // Se testea por separado porque usa una clave distinta en el caché; un bug
+  // en el prefijo de clave podría hacer que findById y findByName compartan slot.
+
+  test("findByName hits underlying only once for repeated calls"):
+    for
+      counter    <- Ref.of[IO, Int](0)
+      underlying  = buildRepo(counter, Right(PokemonFixtures.pikachu))
+      cache       = Scaffeine().build[String, Pokemon]()
+      repo        = CachedPokemonRepository[IO](underlying, cache)
+      _          <- repo.findByName("pikachu")
+      _          <- repo.findByName("pikachu")
+      _          <- repo.findByName("pikachu")
+      calls      <- counter.get
+    yield assertEquals(calls, 1)
+
+  test("findByName does not cache errors"):
+    for
+      counter    <- Ref.of[IO, Int](0)
+      underlying  = buildRepo(counter, Left(DomainError.NotFound("not found")))
+      cache       = Scaffeine().build[String, Pokemon]()
+      repo        = CachedPokemonRepository[IO](underlying, cache)
+      _          <- repo.findByName("unknown")
+      _          <- repo.findByName("unknown")
+      calls      <- counter.get
+    yield assertEquals(calls, 2)

@@ -49,3 +49,15 @@ class GetPokemonUseCaseSpec extends CatsEffectSuite:
       .executeByName("pikachu")
       .map: result =>
         assertEquals(result, Right(PokemonFixtures.pikachu))
+
+  // Partición: executeByName con nombre inexistente → Left(NotFound)
+  // Complementa el caso exitoso de executeByName para cubrir la clase de error.
+  test("executeByName returns NotFound when Pokemon does not exist"):
+    val error   = DomainError.NotFound("Pokemon unknown not found")
+    val repo    = repoReturning(Left(error))
+    val useCase = GetPokemonUseCase(repo)
+
+    useCase
+      .executeByName("unknown")
+      .map: result =>
+        assertEquals(result, Left(error))
