@@ -158,8 +158,8 @@ body {
 }
 
 .card-sprite-wrap {
-  width: 157px;
-  height: 157px;
+  width: 140px;
+  height: 140px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -175,8 +175,8 @@ body {
 }
 
 .card-sprite {
-  width: 157px;
-  height: 157px;
+  width: 140px;
+  height: 140px;
   image-rendering: pixelated;
   position: relative;
   filter: drop-shadow(1px 2px 0 rgba(0,0,0,0.4));
