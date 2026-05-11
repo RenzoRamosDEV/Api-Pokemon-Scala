@@ -1143,13 +1143,13 @@ td.stat-down { color: #882222; font-weight: bold; }
 
 .ability-id {
   font-family: 'Press Start 2P', monospace;
-  font-size: 0.38rem;
+  font-size: 0.48rem;
   color: rgba(255,255,255,0.6);
 }
 
 .ability-card-name {
   font-family: 'Press Start 2P', monospace;
-  font-size: 0.45rem;
+  font-size: 0.6rem;
   color: var(--white);
   text-shadow: 1px 1px 0 var(--black);
   line-height: 1.8;
@@ -1157,7 +1157,7 @@ td.stat-down { color: #882222; font-weight: bold; }
 
 .ability-pokemon-count {
   font-family: 'VT323', monospace;
-  font-size: 1rem;
+  font-size: 1.2rem;
   color: rgba(255,255,255,0.7);
 }
 
