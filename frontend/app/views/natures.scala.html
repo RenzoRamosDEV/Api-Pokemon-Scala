@@ -78,6 +78,7 @@
               @for(n <- neutrals.take((neutrals.size + 1) / 2)) {
                 <div class="acc-nature-row">
                   <span class="acc-nature-name">@n.name.replace("-"," ").toUpperCase</span>
+                  <span class="acc-nature-sub acc-neutral-tag">— NEUTRAL</span>
                 </div>
               }
             </div>
@@ -86,6 +87,7 @@
               @for(n <- neutrals.drop((neutrals.size + 1) / 2)) {
                 <div class="acc-nature-row">
                   <span class="acc-nature-name">@n.name.replace("-"," ").toUpperCase</span>
+                  <span class="acc-nature-sub acc-neutral-tag">— NEUTRAL</span>
                 </div>
               }
             </div>
