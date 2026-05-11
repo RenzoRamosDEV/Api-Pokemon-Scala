@@ -1,5 +1,5 @@
 @(pokemons: List[models.Pokemon], currentPage: Int, totalPages: Int)
-@main("POKÉDEX — Retro Edition") {
+@main("POKÉDEX — Retro Edition", "pokedex") {
 
   <div class="pokedex-grid">
     @for(pokemon <- pokemons) {

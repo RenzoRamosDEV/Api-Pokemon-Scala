@@ -572,3 +572,594 @@ body {
     grid-template-columns: repeat(2, 1fr);
   }
 }
+
+/* ═══════════════════════════════════════════════════
+   HAMBURGER MENU (CSS-only checkbox hack)
+   ═══════════════════════════════════════════════════ */
+
+.nav-toggle {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.hamburger {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 36px;
+  height: 36px;
+  cursor: pointer;
+  padding: 4px;
+  border: 2px solid rgba(255,255,255,0.4);
+  flex-shrink: 0;
+}
+
+.hamburger span {
+  display: block;
+  width: 100%;
+  height: 3px;
+  background: var(--white);
+  transition: transform 0.2s, opacity 0.2s;
+}
+
+/* Animación a X cuando está abierto */
+.nav-toggle:checked ~ .header-inner .hamburger span:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+}
+.nav-toggle:checked ~ .header-inner .hamburger span:nth-child(2) {
+  opacity: 0;
+}
+.nav-toggle:checked ~ .header-inner .hamburger span:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
+}
+
+.nav-menu {
+  display: none;
+  position: absolute;
+  top: 56px;
+  left: 0;
+  right: 0;
+  background: var(--black);
+  border-bottom: 4px solid var(--red);
+  flex-direction: column;
+  z-index: 200;
+}
+
+.nav-toggle:checked ~ .nav-menu {
+  display: flex;
+}
+
+.nav-link {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.55rem;
+  color: #aaa;
+  text-decoration: none;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #222;
+  letter-spacing: 1px;
+  transition: background 0.1s, color 0.1s;
+}
+
+.nav-link:hover { background: #1a1a1a; color: var(--white); }
+.nav-link.active { color: var(--yellow); border-left: 4px solid var(--red); }
+
+.site-title-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* ═══════════════════════════════════════════════════
+   PAGE HEADER (común a todas las secciones)
+   ═══════════════════════════════════════════════════ */
+
+.page-header {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 4px solid var(--red);
+  padding-bottom: 0.8rem;
+}
+
+.page-title {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.85rem;
+  color: var(--white);
+  text-shadow: 2px 2px 0 var(--black);
+}
+
+.page-count {
+  font-family: 'VT323', monospace;
+  font-size: 1.2rem;
+  color: var(--yellow);
+}
+
+/* ═══════════════════════════════════════════════════
+   MOVIMIENTOS
+   ═══════════════════════════════════════════════════ */
+
+.moves-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+.move-card {
+  background: var(--card-cream);
+  border: 3px solid var(--black);
+  box-shadow: var(--shadow-hard);
+  padding: 0.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  color: var(--black);
+}
+
+.move-card-top {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.move-id {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.38rem;
+  color: #888;
+}
+
+.damage-class {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.35rem;
+  padding: 3px 6px;
+  border: 2px solid var(--black);
+  margin-left: auto;
+}
+
+.damage-class.physical { background: #c03028; color: var(--white); }
+.damage-class.special  { background: #4070c0; color: var(--white); }
+.damage-class.status   { background: #787878; color: var(--white); }
+
+.move-name {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.45rem;
+  color: var(--black);
+  line-height: 1.6;
+}
+
+.move-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+}
+
+.move-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(0,0,0,0.06);
+  border: 1px solid rgba(0,0,0,0.15);
+  padding: 4px 2px;
+}
+
+.move-stat-label {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.28rem;
+  color: #666;
+}
+
+.move-stat-value {
+  font-family: 'VT323', monospace;
+  font-size: 1.2rem;
+  color: var(--black);
+  line-height: 1;
+}
+
+.move-effect {
+  font-family: 'VT323', monospace;
+  font-size: 1rem;
+  color: #444;
+  border-top: 1px solid rgba(0,0,0,0.1);
+  padding-top: 4px;
+  line-height: 1.3;
+}
+
+/* ═══════════════════════════════════════════════════
+   NATURALEZAS
+   ═══════════════════════════════════════════════════ */
+
+.table-wrap { overflow-x: auto; }
+
+.natures-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 3px solid var(--black);
+}
+
+.natures-table th {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.4rem;
+  background: var(--black);
+  color: var(--white);
+  padding: 10px 12px;
+  text-align: left;
+  letter-spacing: 1px;
+  white-space: nowrap;
+}
+
+.natures-table th.stat-up  { color: var(--green); }
+.natures-table th.stat-down { color: #ff6666; }
+
+.nature-row {
+  border-bottom: 2px solid var(--black);
+  background: var(--card-cream);
+}
+
+.nature-row:nth-child(even) { background: #ede8de; }
+.nature-row.neutral { background: #e8e8e8; }
+
+.natures-table td {
+  font-family: 'VT323', monospace;
+  font-size: 1.2rem;
+  padding: 8px 12px;
+}
+
+.nature-id   { color: #888; font-size: 1rem !important; }
+.nature-name { font-family: 'Press Start 2P', monospace !important; font-size: 0.4rem !important; color: var(--black); }
+td.stat-up   { color: #226622; font-weight: bold; }
+td.stat-down { color: #882222; font-weight: bold; }
+.flavor-likes { color: #226622; }
+.flavor-hates { color: #882222; }
+
+/* ═══════════════════════════════════════════════════
+   OBJETOS
+   ═══════════════════════════════════════════════════ */
+
+.items-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.item-card {
+  background: var(--card-cream);
+  border: 3px solid var(--black);
+  box-shadow: var(--shadow-hard);
+  display: flex;
+  gap: 0.8rem;
+  padding: 0.8rem;
+  color: var(--black);
+  align-items: flex-start;
+}
+
+.item-sprite-wrap {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  border: 2px solid var(--black);
+  background: #e0dbd0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.item-sprite { width: 48px; height: 48px; image-rendering: pixelated; }
+
+.item-sprite-missing {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 1.2rem;
+  color: #aaa;
+}
+
+.item-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.item-id {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.32rem;
+  color: #888;
+}
+
+.item-name {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.38rem;
+  color: var(--black);
+  line-height: 1.6;
+  word-break: break-word;
+}
+
+.item-category {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.3rem;
+  color: var(--red-dark);
+}
+
+.item-cost {
+  font-family: 'VT323', monospace;
+  font-size: 1.1rem;
+  color: #5a4a00;
+}
+
+.item-effect {
+  font-family: 'VT323', monospace;
+  font-size: 0.95rem;
+  color: #444;
+  line-height: 1.3;
+  border-top: 1px solid rgba(0,0,0,0.1);
+  padding-top: 4px;
+  margin-top: 2px;
+}
+
+/* ═══════════════════════════════════════════════════
+   BAYAS
+   ═══════════════════════════════════════════════════ */
+
+.berries-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.berry-card {
+  background: var(--card-cream);
+  border: 3px solid var(--black);
+  box-shadow: var(--shadow-hard);
+  padding: 0.8rem;
+  color: var(--black);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.berry-card-top {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.berry-id {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.38rem;
+  color: #888;
+}
+
+.berry-name {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.42rem;
+  color: var(--black);
+  line-height: 1.6;
+}
+
+.berry-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+}
+
+.berry-stat {
+  display: flex;
+  flex-direction: column;
+  background: rgba(0,0,0,0.05);
+  border: 1px solid rgba(0,0,0,0.12);
+  padding: 4px 6px;
+}
+
+.berry-stat-label {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.28rem;
+  color: #666;
+}
+
+.berry-stat-value {
+  font-family: 'VT323', monospace;
+  font-size: 1.1rem;
+  color: var(--black);
+}
+
+.berry-flavors {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  border-top: 1px solid rgba(0,0,0,0.12);
+  padding-top: 6px;
+}
+
+.berry-flavor {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.3rem;
+  padding: 3px 6px;
+  border: 2px solid var(--black);
+  color: var(--white);
+  background: #555;
+}
+
+.flavor-spicy  { background: #c03028; }
+.flavor-dry    { background: #4070c0; }
+.flavor-sweet  { background: #d060a0; }
+.flavor-bitter { background: #226644; }
+.flavor-sour   { background: #a0b820; }
+
+/* ═══════════════════════════════════════════════════
+   TIPOS
+   ═══════════════════════════════════════════════════ */
+
+.types-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.type-detail-card {
+  border: 3px solid var(--black);
+  box-shadow: var(--shadow-hard);
+  overflow: hidden;
+}
+
+.type-detail-header {
+  padding: 0.7rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 3px solid var(--black);
+}
+
+.type-detail-name {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.65rem;
+  color: var(--white);
+  text-shadow: 2px 2px 0 rgba(0,0,0,0.5);
+}
+
+.type-pokemon-count {
+  font-family: 'VT323', monospace;
+  font-size: 1.1rem;
+  color: rgba(255,255,255,0.8);
+}
+
+/* Fondo del header de cada tipo usando las mismas clases de tipo */
+.type-bg-normal   { background: #787858; }
+.type-bg-fire     { background: #c03000; }
+.type-bg-water    { background: #2060c0; }
+.type-bg-electric { background: #a89000; }
+.type-bg-grass    { background: #408030; }
+.type-bg-ice      { background: #6090a0; }
+.type-bg-fighting { background: #903028; }
+.type-bg-poison   { background: #682070; }
+.type-bg-ground   { background: #887830; }
+.type-bg-flying   { background: #6850b0; }
+.type-bg-psychic  { background: #a01840; }
+.type-bg-bug      { background: #607020; }
+.type-bg-rock     { background: #786820; }
+.type-bg-ghost    { background: #483870; }
+.type-bg-dragon   { background: #4010a8; }
+.type-bg-dark     { background: #483820; }
+.type-bg-steel    { background: #686878; }
+.type-bg-fairy    { background: #a04060; }
+
+.type-detail-body {
+  background: var(--card-cream);
+  padding: 0.6rem 0.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.type-relations-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.type-rel-label {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.32rem;
+  padding: 3px 5px;
+  border: 2px solid var(--black);
+  white-space: nowrap;
+  flex-shrink: 0;
+  color: var(--white);
+  margin-top: 1px;
+}
+
+.type-rel-label.atk2x  { background: #226622; }
+.type-rel-label.atkhalf { background: #882222; }
+.type-rel-label.atk0x  { background: #333; }
+.type-rel-label.def2x  { background: #882222; }
+.type-rel-label.def0x  { background: #226622; }
+
+.type-rel-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+}
+
+/* ═══════════════════════════════════════════════════
+   HABILIDADES
+   ═══════════════════════════════════════════════════ */
+
+.abilities-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.ability-card {
+  background: var(--card-cream);
+  border: 3px solid var(--black);
+  box-shadow: var(--shadow-hard);
+  display: flex;
+  color: var(--black);
+}
+
+.ability-card-left {
+  background: var(--red);
+  border-right: 3px solid var(--black);
+  padding: 0.8rem 1rem;
+  min-width: 180px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  justify-content: center;
+}
+
+.ability-id {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.38rem;
+  color: rgba(255,255,255,0.6);
+}
+
+.ability-card-name {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.45rem;
+  color: var(--white);
+  text-shadow: 1px 1px 0 var(--black);
+  line-height: 1.8;
+}
+
+.ability-pokemon-count {
+  font-family: 'VT323', monospace;
+  font-size: 1rem;
+  color: rgba(255,255,255,0.7);
+}
+
+.ability-card-right {
+  padding: 0.8rem 1rem;
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+.ability-card-effect {
+  font-family: 'VT323', monospace;
+  font-size: 1.15rem;
+  color: #333;
+  line-height: 1.4;
+}
+
+/* ═══════════════════════════════════════════════════
+   RESPONSIVE — Nuevas secciones
+   ═══════════════════════════════════════════════════ */
+
+@media (max-width: 640px) {
+  .moves-grid { grid-template-columns: 1fr; }
+  .items-grid { grid-template-columns: 1fr; }
+  .berries-grid { grid-template-columns: repeat(2, 1fr); }
+  .types-grid { grid-template-columns: 1fr; }
+
+  .ability-card { flex-direction: column; }
+  .ability-card-left {
+    border-right: none;
+    border-bottom: 3px solid var(--black);
+    min-width: unset;
+  }
+
+  .natures-table { font-size: 0.85rem; }
+  .move-stats { grid-template-columns: repeat(2, 1fr); }
+}

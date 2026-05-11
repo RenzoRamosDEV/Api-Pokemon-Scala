@@ -1,0 +1,77 @@
+@(types: List[models.GameType])
+@main("TIPOS — Pokédex Retro", "tipos") {
+
+  <div class="page-header">
+    <h2 class="page-title">TIPOS</h2>
+    <span class="page-count">@types.length TIPOS</span>
+  </div>
+
+  <div class="types-grid">
+    @for(t <- types) {
+      <div class="type-detail-card">
+        <div class="type-detail-header type-bg-@t.name">
+          <h3 class="type-detail-name">@t.name.toUpperCase</h3>
+          <span class="type-pokemon-count">@t.pokemonCount PKM</span>
+        </div>
+        <div class="type-detail-body">
+
+          @if(t.doubleDamageTo.nonEmpty) {
+            <div class="type-relations-row">
+              <span class="type-rel-label atk2x">2x ATK</span>
+              <div class="type-rel-badges">
+                @for(tn <- t.doubleDamageTo) {
+                  <span class="type-badge type-@tn">@tn.toUpperCase</span>
+                }
+              </div>
+            </div>
+          }
+
+          @if(t.halfDamageTo.nonEmpty) {
+            <div class="type-relations-row">
+              <span class="type-rel-label atkhalf">½ ATK</span>
+              <div class="type-rel-badges">
+                @for(tn <- t.halfDamageTo) {
+                  <span class="type-badge type-@tn">@tn.toUpperCase</span>
+                }
+              </div>
+            </div>
+          }
+
+          @if(t.noDamageTo.nonEmpty) {
+            <div class="type-relations-row">
+              <span class="type-rel-label atk0x">0 ATK</span>
+              <div class="type-rel-badges">
+                @for(tn <- t.noDamageTo) {
+                  <span class="type-badge type-@tn">@tn.toUpperCase</span>
+                }
+              </div>
+            </div>
+          }
+
+          @if(t.doubleDamageFrom.nonEmpty) {
+            <div class="type-relations-row">
+              <span class="type-rel-label def2x">2x DEF</span>
+              <div class="type-rel-badges">
+                @for(tn <- t.doubleDamageFrom) {
+                  <span class="type-badge type-@tn">@tn.toUpperCase</span>
+                }
+              </div>
+            </div>
+          }
+
+          @if(t.noDamageFrom.nonEmpty) {
+            <div class="type-relations-row">
+              <span class="type-rel-label def0x">INMU</span>
+              <div class="type-rel-badges">
+                @for(tn <- t.noDamageFrom) {
+                  <span class="type-badge type-@tn">@tn.toUpperCase</span>
+                }
+              </div>
+            </div>
+          }
+
+        </div>
+      </div>
+    }
+  </div>
+}

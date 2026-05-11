@@ -1,0 +1,39 @@
+@(natures: List[models.Nature])
+@main("NATURALEZAS — Pokédex Retro", "naturalezas") {
+
+  <div class="page-header">
+    <h2 class="page-title">NATURALEZAS</h2>
+    <span class="page-count">@natures.length NATURALEZAS</span>
+  </div>
+
+  <div class="table-wrap">
+    <table class="natures-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>NOMBRE</th>
+          <th class="stat-up">STAT +</th>
+          <th class="stat-down">STAT -</th>
+          <th>LE GUSTA</th>
+          <th>ODIA</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for(n <- natures) {
+          <tr class="nature-row @if(n.increasedStat.isEmpty){neutral}">
+            <td class="nature-id">#@{"%02d".format(n.id)}</td>
+            <td class="nature-name">@n.name.toUpperCase</td>
+            <td class="stat-up">
+              @n.increasedStat.map(s => s.replace("-", " ").toUpperCase).getOrElse("—")
+            </td>
+            <td class="stat-down">
+              @n.decreasedStat.map(s => s.replace("-", " ").toUpperCase).getOrElse("—")
+            </td>
+            <td class="flavor-likes">@n.likesFlavor.map(_.toUpperCase).getOrElse("—")</td>
+            <td class="flavor-hates">@n.hatesFlavor.map(_.toUpperCase).getOrElse("—")</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+}

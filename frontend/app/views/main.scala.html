@@ -1,4 +1,4 @@
-@(title: String)(content: Html)
+@(title: String, section: String)(content: Html)
 <!DOCTYPE html>
 <html lang="es" prefix="og: https://ogp.me/ns#">
 <head>
@@ -44,15 +44,28 @@
 </head>
 <body>
   <header class="site-header">
+    <!-- Checkbox hack para menú sin JS -->
+    <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-hidden="true">
+
     <div class="header-inner">
-      <div class="header-logo">
-        <span class="logo-dot red"></span>
-        <span class="logo-dot yellow"></span>
-        <span class="logo-dot green"></span>
-      </div>
-      <h1 class="site-title">POKEDEX</h1>
+      <label for="nav-toggle" class="hamburger" aria-label="Abrir menú">
+        <span></span>
+        <span></span>
+        <span></span>
+      </label>
+      <h1 class="site-title"><a href="/" class="site-title-link">POKEDEX</a></h1>
       <div class="header-badge">RENZO RAMOS</div>
     </div>
+
+    <nav class="nav-menu" aria-label="Navegación principal">
+      <a href="/"             class="nav-link @if(section == "pokedex"){active}">POKEDEX</a>
+      <a href="/movimientos"  class="nav-link @if(section == "movimientos"){active}">MOVIMIENTOS</a>
+      <a href="/tipos"        class="nav-link @if(section == "tipos"){active}">TIPOS</a>
+      <a href="/habilidades"  class="nav-link @if(section == "habilidades"){active}">HABILIDADES</a>
+      <a href="/naturalezas"  class="nav-link @if(section == "naturalezas"){active}">NATURALEZAS</a>
+      <a href="/objetos"      class="nav-link @if(section == "objetos"){active}">OBJETOS</a>
+      <a href="/bayas"        class="nav-link @if(section == "bayas"){active}">BAYAS</a>
+    </nav>
   </header>
 
   <main class="site-main">

@@ -1,0 +1,47 @@
+@(items: List[models.Item], currentPage: Int, totalPages: Int)
+@main("OBJETOS — Pokédex Retro", "objetos") {
+
+  <div class="page-header">
+    <h2 class="page-title">OBJETOS</h2>
+    <span class="page-count">@items.length OBJETOS</span>
+  </div>
+
+  <div class="items-grid">
+    @for(item <- items) {
+      <div class="item-card">
+        <div class="item-sprite-wrap">
+          @item.sprite.map { url =>
+            <img src="@url" alt="@item.name" class="item-sprite">
+          }.getOrElse {
+            <div class="item-sprite-missing">?</div>
+          }
+        </div>
+        <div class="item-info">
+          <span class="item-id">#@{"%04d".format(item.id)}</span>
+          <h3 class="item-name">@item.name.replace("-", " ").toUpperCase</h3>
+          <span class="item-category">@item.category.replace("-", " ").toUpperCase</span>
+          <span class="item-cost">@{"%,d".format(item.cost)} P</span>
+          @if(item.shortEffect.nonEmpty && item.shortEffect != "—") {
+            <p class="item-effect">@item.shortEffect</p>
+          }
+        </div>
+      </div>
+    }
+  </div>
+
+  @if(totalPages > 1) {
+    <nav class="pagination">
+      @if(currentPage > 1) {
+        <a href="/objetos?page=@{currentPage - 1}" class="page-btn">◀ PREV</a>
+      } else {
+        <span class="page-btn disabled">◀ PREV</span>
+      }
+      <span class="page-info">@currentPage / @totalPages</span>
+      @if(currentPage < totalPages) {
+        <a href="/objetos?page=@{currentPage + 1}" class="page-btn">NEXT ▶</a>
+      } else {
+        <span class="page-btn disabled">NEXT ▶</span>
+      }
+    </nav>
+  }
+}
