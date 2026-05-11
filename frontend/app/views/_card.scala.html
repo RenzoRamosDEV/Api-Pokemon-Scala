@@ -1,0 +1,23 @@
+@(pokemon: models.Pokemon)
+<a href="#pokemon-@pokemon.id" class="card-link" aria-label="Ver detalles de @pokemon.name">
+  <article class="poke-card">
+    <div class="card-top">
+      <span class="card-number">#@{"%03d".format(pokemon.id)}</span>
+      <div class="card-sprite-wrap">
+        @pokemon.sprites.frontDefault.map { url =>
+          <img src="@url" alt="@pokemon.name" class="card-sprite" loading="lazy">
+        }.getOrElse {
+          <div class="card-sprite-missing">?</div>
+        }
+      </div>
+    </div>
+    <div class="card-bottom">
+      <h2 class="card-name">@pokemon.name.toUpperCase</h2>
+      <div class="card-types">
+        @for(pt <- pokemon.types.sortBy(_.slot)) {
+          <span class="type-badge type-@pt.typeName">@pt.typeName.toUpperCase</span>
+        }
+      </div>
+    </div>
+  </article>
+</a>
