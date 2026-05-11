@@ -28,7 +28,7 @@ object NatureCodec:
       hatesFlavor   <- c.downField("hates_flavor").as[Option[NamedResource]]
       likesFlavor   <- c.downField("likes_flavor").as[Option[NamedResource]]
       statChanges <- c
-        .downField("move_battle_style_preferences")
+        .downField("stat_changes")
         .as[Option[List[NatureStatChange]]]
         .map(_.getOrElse(Nil))
       pokeathlonStatChanges <- c
