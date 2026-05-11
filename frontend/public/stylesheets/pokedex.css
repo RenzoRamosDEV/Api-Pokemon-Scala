@@ -1024,7 +1024,7 @@ td.stat-down { color: #882222; font-weight: bold; }
 .matrix-scroll {
   overflow-x: auto;
   overflow-y: auto;
-  max-height: calc(100vh - 180px);
+  max-height: calc(100vh - 170px);
   border: 3px solid var(--black);
   box-shadow: var(--shadow-hard);
 }
@@ -1036,67 +1036,81 @@ td.stat-down { color: #882222; font-weight: bold; }
 
 .type-matrix th,
 .type-matrix td {
-  border: 1px solid rgba(0,0,0,0.25);
+  border: 1px solid rgba(255,255,255,0.06);
 }
 
 .matrix-corner {
-  background: var(--black);
+  background: #0d0d0d;
   color: var(--white);
   font-family: 'Press Start 2P', monospace;
-  font-size: 0.35rem;
-  padding: 6px 8px;
+  font-size: 0.3rem;
+  padding: 8px 10px;
   text-align: center;
   white-space: nowrap;
   position: sticky;
   top: 0;
   left: 0;
   z-index: 3;
+  vertical-align: bottom;
 }
 
 .matrix-col-header {
-  background: var(--black);
-  padding: 5px 4px;
+  background: #0d0d0d;
+  padding: 8px 4px 4px;
   text-align: center;
   position: sticky;
   top: 0;
   z-index: 2;
+  vertical-align: bottom;
+}
+
+.matrix-col-header .type-badge {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  transform: rotate(180deg);
+  font-size: 0.42rem;
+  padding: 6px 4px;
+  display: inline-block;
+  letter-spacing: 0.05em;
 }
 
 .matrix-row-header {
-  background: var(--black);
-  padding: 4px 6px;
+  background: #0d0d0d;
+  padding: 4px 8px;
   white-space: nowrap;
   position: sticky;
   left: 0;
   z-index: 1;
 }
 
-.matrix-col-header .type-badge,
 .matrix-row-header .type-badge {
-  font-size: 0.38rem;
-  padding: 3px 5px;
+  font-size: 0.42rem;
+  padding: 4px 7px;
+  display: inline-block;
+  min-width: 70px;
+  text-align: center;
 }
 
 .matrix-cell {
   font-family: 'Press Start 2P', monospace;
-  font-size: 0.4rem;
+  font-size: 0.42rem;
   text-align: center;
-  width: 36px;
-  height: 32px;
+  width: 42px;
+  height: 38px;
   vertical-align: middle;
 }
 
 /* efectividades */
-.eff-2-cell  { background: #2d7a2d; color: #fff; }
-.eff-h-cell  { background: #8b3a3a; color: #fff; }
-.eff-0-cell  { background: #111;    color: #555; }
-.eff-1-cell  { background: #2a2a2a; color: transparent; }
+.eff-2-cell { background: #1e6b1e; color: #a8ffb0; }
+.eff-h-cell { background: #7a2020; color: #ffb8b8; }
+.eff-0-cell { background: #111;    color: #444;    }
+.eff-1-cell { background: #1c1c1c; color: transparent; }
 
 /* leyenda */
-.eff-2x-cell   { background: #2d7a2d; color: #fff; }
-.eff-half-cell { background: #8b3a3a; color: #fff; }
-.eff-0-cell    { background: #111;    color: #aaa; }
-.eff-1-cell    { background: #2a2a2a; color: #555; }
+.eff-2x-cell   { background: #1e6b1e; color: #a8ffb0; }
+.eff-half-cell { background: #7a2020; color: #ffb8b8; }
+.eff-0-cell    { background: #111;    color: #888; }
+.eff-1-cell    { background: #1c1c1c; color: #555; }
 
 /* ═══════════════════════════════════════════════════
    HABILIDADES
