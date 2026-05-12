@@ -66,20 +66,8 @@ object DomainEncoders:
 
   given Encoder[EvolutionChain] = deriveEncoder
 
-  // ── World (Location / Region / Generation) ────────────────────────────────
-  given Encoder[Location]   = deriveEncoder
-  given Encoder[Generation] = deriveEncoder
-  given Encoder[Region]     = deriveEncoder
-
-  // ── Stat ──────────────────────────────────────────────────────────────────
-  given Encoder[MoveStatAffect]       = deriveEncoder
-  given Encoder[StatAffectingMoves]   = deriveEncoder
-  given Encoder[StatAffectingNatures] = deriveEncoder
-  given Encoder[Stat]                 = deriveEncoder
-
-  // ── Pokedex ───────────────────────────────────────────────────────────────
-  given Encoder[PokemonEntry] = deriveEncoder
-  given Encoder[Pokedex]      = deriveEncoder
+  // ── World (Location) ──────────────────────────────────────────────────────
+  given Encoder[Location] = deriveEncoder
 
   // ── PokemonFull (endpoint /pokemon/{id}/full) ─────────────────────────────
   given Encoder[EvolutionChainRef] = deriveEncoder
