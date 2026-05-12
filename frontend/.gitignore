@@ -1,7 +1,0 @@
-target/
-.bsp/
-.metals/
-.idea/
-*.class
-*.log
-dist/
