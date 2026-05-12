@@ -20,9 +20,7 @@ case class Nature(
     id: Int,
     name: String,
     decreasedStat: Option[String],
-    increasedStat: Option[String],
-    hatesFlavor: Option[String],
-    likesFlavor: Option[String]
+    increasedStat: Option[String]
 )
 
 // ── Item ──────────────────────────────────────────────────────────
@@ -56,11 +54,7 @@ case class GameType(
     name: String,
     doubleDamageTo: List[String],
     halfDamageTo: List[String],
-    noDamageTo: List[String],
-    doubleDamageFrom: List[String],
-    halfDamageFrom: List[String],
-    noDamageFrom: List[String],
-    pokemonCount: Int
+    noDamageTo: List[String]
 )
 
 // ── Ability ───────────────────────────────────────────────────────
@@ -109,9 +103,7 @@ object GameModels:
     yield Nature(
       id, name,
       nameOf(d, "decreasedStat"),
-      nameOf(d, "increasedStat"),
-      nameOf(d, "hatesFlavor"),
-      nameOf(d, "likesFlavor")
+      nameOf(d, "increasedStat")
     )
 
   given Reads[Item] = (json: JsValue) =>
@@ -154,16 +146,11 @@ object GameModels:
     for
       id   <- (d \ "id").validate[Int]
       name <- (d \ "name").validate[String]
-      pkCount = (d \ "pokemon").asOpt[JsArray].map(_.value.length).getOrElse(0)
     yield GameType(
       id, name,
       namesOf(dr, "doubleDamageTo"),
       namesOf(dr, "halfDamageTo"),
-      namesOf(dr, "noDamageTo"),
-      namesOf(dr, "doubleDamageFrom"),
-      namesOf(dr, "halfDamageFrom"),
-      namesOf(dr, "noDamageFrom"),
-      pkCount
+      namesOf(dr, "noDamageTo")
     )
 
   given Reads[Ability] = (json: JsValue) =>
