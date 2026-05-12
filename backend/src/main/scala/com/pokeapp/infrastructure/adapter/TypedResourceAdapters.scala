@@ -9,8 +9,8 @@ import com.pokeapp.infrastructure.http.codec.AbilityCodec.given
 import com.pokeapp.infrastructure.http.codec.BerryCodec.given
 import com.pokeapp.infrastructure.http.codec.EvolutionCodec.given
 import com.pokeapp.infrastructure.http.codec.ItemCodec.given
-import com.pokeapp.infrastructure.http.codec.WorldCodecs.given
 import com.pokeapp.infrastructure.http.codec.MoveCodec.given
+import com.pokeapp.infrastructure.http.codec.WorldCodecs.given
 import com.pokeapp.infrastructure.http.codec.NatureCodec.given
 import com.pokeapp.infrastructure.http.codec.TypeCodec.given
 
@@ -80,35 +80,3 @@ class HttpLocationRepository[F[_]](client: PokeApiClient[F])
   def list(limit: Int, offset: Int): F[Either[DomainError, PaginatedResponse[NamedResource]]] =
     client.listResource("location", limit, offset)
 
-class HttpGenerationRepository[F[_]](client: PokeApiClient[F])
-    extends ResourceRepository[F, Generation]:
-  def findById(id: Int): F[Either[DomainError, Generation]] =
-    client.getResource[Generation]("generation", id.toString)
-  def findByName(name: String): F[Either[DomainError, Generation]] =
-    client.getResource[Generation]("generation", name)
-  def list(limit: Int, offset: Int): F[Either[DomainError, PaginatedResponse[NamedResource]]] =
-    client.listResource("generation", limit, offset)
-
-class HttpRegionRepository[F[_]](client: PokeApiClient[F]) extends ResourceRepository[F, Region]:
-  def findById(id: Int): F[Either[DomainError, Region]] =
-    client.getResource[Region]("region", id.toString)
-  def findByName(name: String): F[Either[DomainError, Region]] =
-    client.getResource[Region]("region", name)
-  def list(limit: Int, offset: Int): F[Either[DomainError, PaginatedResponse[NamedResource]]] =
-    client.listResource("region", limit, offset)
-
-class HttpStatRepository[F[_]](client: PokeApiClient[F]) extends ResourceRepository[F, Stat]:
-  def findById(id: Int): F[Either[DomainError, Stat]] =
-    client.getResource[Stat]("stat", id.toString)
-  def findByName(name: String): F[Either[DomainError, Stat]] =
-    client.getResource[Stat]("stat", name)
-  def list(limit: Int, offset: Int): F[Either[DomainError, PaginatedResponse[NamedResource]]] =
-    client.listResource("stat", limit, offset)
-
-class HttpPokedexRepository[F[_]](client: PokeApiClient[F]) extends ResourceRepository[F, Pokedex]:
-  def findById(id: Int): F[Either[DomainError, Pokedex]] =
-    client.getResource[Pokedex]("pokedex", id.toString)
-  def findByName(name: String): F[Either[DomainError, Pokedex]] =
-    client.getResource[Pokedex]("pokedex", name)
-  def list(limit: Int, offset: Int): F[Either[DomainError, PaginatedResponse[NamedResource]]] =
-    client.listResource("pokedex", limit, offset)
